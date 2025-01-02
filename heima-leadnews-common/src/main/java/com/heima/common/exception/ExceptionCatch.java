@@ -8,6 +8,14 @@ import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+ /*
+  * @Title: ExceptionCatch
+  * @Author: pyzxW
+  * @Date: 2025-01-02 10:52:46
+  * @Params:  
+  * @Return: null
+  * @Description: 全局异常拦截处理方式
+  */
 @ControllerAdvice  //控制器增强类
 @Slf4j
 public class ExceptionCatch {
