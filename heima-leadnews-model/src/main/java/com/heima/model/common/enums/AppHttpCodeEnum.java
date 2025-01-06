@@ -1,5 +1,13 @@
 package com.heima.model.common.enums;
 
+ /*
+  * @Title:
+  * @Author: pyzxW
+  * @Date: 2025-01-06 10:40:43
+  * @Params:
+  * @Return: null
+  * @Description:接口响应是否成功的状态码
+  */
 public enum AppHttpCodeEnum {
 
     // 成功段0
