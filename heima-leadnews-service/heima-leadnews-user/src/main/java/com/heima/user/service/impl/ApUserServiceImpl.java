@@ -46,6 +46,7 @@ public class ApUserServiceImpl extends ServiceImpl<ApUserMapper, ApUser> impleme
                 return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST,"用户信息不存在");
             }
             // 1.2 对比密码
+            //获得SALT规则
             String salt = dbUser.getSalt();
             String password = dto.getPassword();
             //将上面两个获得的信息进行加密
