@@ -37,6 +37,10 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
       * @Return: null
       * @Description:
       */
+
+    /*
+    * 函数接收的参数是持久层传回的list集合，需要进行转化，变为controller需要传回的ResponseResult
+    * */
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short type) {
         List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, type);
