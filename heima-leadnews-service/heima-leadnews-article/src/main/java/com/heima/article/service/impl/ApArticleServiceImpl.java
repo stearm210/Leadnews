@@ -3,6 +3,7 @@ package com.heima.article.service.impl;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.ApArticleService;
+import com.heima.common.constants.ArticleConstants;
 import com.heima.model.article.dtos.ArticleHomeDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.common.dtos.ResponseResult;
@@ -55,8 +56,8 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         //分页的值不超过50
         size = Math.min(size, MAX_PAGE_SIZE);
         //校验参数 -->type
-        if (!type.equals(1) && !type.equals(2)){
-            type = 1;
+        if (!type.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !type.equals(ArticleConstants.LOADTYPE_LOAD_NEW)){
+            type = ArticleConstants.LOADTYPE_LOAD_MORE;
         }
 
         //频道参数校验
