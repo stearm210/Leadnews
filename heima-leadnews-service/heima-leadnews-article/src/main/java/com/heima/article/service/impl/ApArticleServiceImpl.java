@@ -29,6 +29,9 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
     @Autowired
     private ApArticleMapper apArticleMapper;
+
+    // 单页最大加载的数字
+    private final static short MAX_PAGE_SIZE = 50;
      /*
       * @Title: load
       * @Author: pyzxW
@@ -43,6 +46,23 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     * */
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short type) {
+        //1.校验参数
+        //分页条数的校验
+        Integer size = dto.getSize();
+        if(size == null || size == 0){
+            size = 10;
+        }
+        //分页的值不超过50
+        size = Math.min(size, MAX_PAGE_SIZE);
+        //校验参数 -->type
+        if (!type.equals(1) && !type.equals(2)){
+            type = 1;
+        }
+
+        //频道参数校验
+
+        //时间校验
+
         List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, type);
 
         //返回最终的结果，封装于ResponseResult
