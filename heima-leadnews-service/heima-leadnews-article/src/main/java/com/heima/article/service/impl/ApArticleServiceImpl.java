@@ -1,5 +1,6 @@
 package com.heima.article.service.impl;
 
+import com.alibaba.cloud.commons.lang.StringUtils;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.ApArticleService;
@@ -12,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -61,9 +63,18 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         }
 
         //频道参数校验
-
+        if(StringUtils.isEmpty(dto.getTag())){
+            dto.setTag(ArticleConstants.DEFAULT_TAG);
+        }
         //时间校验
+        //最大时间
+        if(dto.getMaxBehotTime() == null){
+            dto.setMaxBehotTime(new Date());
+        }
+        //最小时间
+        if(dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
 
+        //2.查询数据
         List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, type);
 
         //返回最终的结果，封装于ResponseResult
