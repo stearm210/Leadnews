@@ -18,7 +18,7 @@
         <td>钱包</td>
     </tr>
 <#--  进行数据遍历, stu是stus中的其中一个对象 -->
-<#--  首先需要对数据进行判空，不为空才进行循环  -->
+<#--  首先需要对对象进行判空(使用两个??)，不为空才进行循环  -->
     <#if stus??>
         <#list stus as stu>
             <#if stu.name='小红'>
@@ -75,6 +75,10 @@
     </#list>
 </table>
 <hr>
+
+<#--today为controller中添加的函数对象-->
+当前的日期为：${today?datetime}
+当前的日期为：${today?string("yyyy年MM月")}
 
 </body>
 </html>

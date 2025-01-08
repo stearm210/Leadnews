@@ -66,6 +66,16 @@ public class HelloController {
         stuMap.put("stu2",stu2);
         // 3.1 向model中存放Map数据
         model.addAttribute("stuMap", stuMap);
+
+        //内置函数例子添加
+        model.addAttribute("today", new Date());
+
+        //常数值函数添加
+        model.addAttribute("point", 12313421414L);
+
+
+
+
         return "02-list";
     }
 
