@@ -47,6 +47,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     /*
     * 函数接收的参数是持久层传回的list集合，需要进行转化，变为controller需要传回的ResponseResult
     * */
+//    传入的short type为对应的时间，注意
     @Override
     public ResponseResult load(ArticleHomeDto dto, Short type) {
         //1.校验参数
