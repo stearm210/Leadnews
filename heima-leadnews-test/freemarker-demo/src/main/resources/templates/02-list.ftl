@@ -18,23 +18,26 @@
         <td>钱包</td>
     </tr>
 <#--  进行数据遍历, stu是stus中的其中一个对象 -->
-    <#list stus as stu>
-        <#if stu.name='小红'>
-            <tr style="color: red">
-                <td>${stu_index}</td>
-                <td>${stu.name}</td>
-                <td>${stu.age}</td>
-                <td>${stu.money}</td>
-            </tr>
-        <#else >
-            <tr>
-                <td>${stu_index}</td>
-                <td>${stu.name}</td>
-                <td>${stu.age}</td>
-                <td>${stu.money}</td>
-            </tr>
-        </#if>
-    </#list>
+<#--  首先需要对对象进行判空(使用两个??)，不为空才进行循环  -->
+    <#if stus??>
+        <#list stus as stu>
+            <#if stu.name='小红'>
+                <tr style="color: red">
+                    <td>${stu_index}</td>
+                    <td>${stu.name}</td>
+                    <td>${stu.age}</td>
+                    <td>${stu.money}</td>
+                </tr>
+            <#else >
+                <tr>
+                    <td>${stu_index}</td>
+                    <td>${stu.name}</td>
+                    <td>${stu.age}</td>
+                    <td>${stu.money}</td>
+                </tr>
+            </#if>
+        </#list>
+    </#if>
 </table>
 <hr>
 
