@@ -19,12 +19,21 @@
     </tr>
 <#--  进行数据遍历, stu是stus中的其中一个对象 -->
     <#list stus as stu>
-        <tr>
-            <td>${stu_index + 1}</td>
-            <td>${stu.name}</td>
-            <td>${stu.age}</td>
-            <td>${stu.money}</td>
-        </tr>
+        <#if stu.name='小红'>
+            <tr style="color: red">
+                <td>${stu_index}</td>
+                <td>${stu.name}</td>
+                <td>${stu.age}</td>
+                <td>${stu.money}</td>
+            </tr>
+        <#else >
+            <tr>
+                <td>${stu_index}</td>
+                <td>${stu.name}</td>
+                <td>${stu.age}</td>
+                <td>${stu.money}</td>
+            </tr>
+        </#if>
     </#list>
 </table>
 <hr>

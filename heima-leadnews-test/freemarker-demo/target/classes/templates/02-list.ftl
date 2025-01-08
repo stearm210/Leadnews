@@ -19,10 +19,12 @@
     </tr>
 <#--  进行数据遍历, stu是stus中的其中一个对象 -->
     <#list stus as stu>
-        <td>${stu_index + 1}</td>
-        <td>${stu.name}</td>
-        <td>${stu.age}</td>
-        <td>${stu.money}</td>
+        <tr>
+            <td>${stu_index + 1}</td>
+            <td>${stu.name}</td>
+            <td>${stu.age}</td>
+            <td>${stu.money}</td>
+        </tr>
     </#list>
 </table>
 <hr>
@@ -49,12 +51,15 @@
         <td>年龄</td>
         <td>钱包</td>
     </tr>
-<#--  key表示stumap中的对象  -->
+<#--  key表示stumap中的对象
+  使用?keys来获取map中的对象，以方便进行遍历-->
     <#list stuMap?keys as key>
-        <td>${key_index}</td>
-        <td>${stuMap[key].name}</td>
-        <td>${stuMap[key].age}</td>
-        <td>${stuMap[key].money}</td>
+        <tr>
+            <td>${key_index}</td>
+            <td>${stuMap[key].name}</td>
+            <td>${stuMap[key].age}</td>
+            <td>${stuMap[key].money}</td>
+        </tr>
     </#list>
 </table>
 <hr>
