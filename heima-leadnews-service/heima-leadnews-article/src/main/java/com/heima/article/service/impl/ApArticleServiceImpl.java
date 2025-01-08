@@ -77,6 +77,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         //2.查询数据
         List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, type);
 
+        //3.结果返回
         //返回最终的结果，封装于ResponseResult
         return ResponseResult.okResult(articleList);
     }
