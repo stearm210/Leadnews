@@ -68,4 +68,6 @@ public class HelloController {
         model.addAttribute("stuMap", stuMap);
         return "02-list";
     }
+
+
 }

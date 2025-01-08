@@ -49,8 +49,7 @@
         <td>年龄</td>
         <td>钱包</td>
     </tr>
-<#--  key表示stumap中的对象
-  使用?keys来获取map中的对象，以方便进行遍历-->
+<#--  key表示stumap中的对象  -->
     <#list stuMap?keys as key>
         <td>${key_index}</td>
         <td>${stuMap[key].name}</td>
