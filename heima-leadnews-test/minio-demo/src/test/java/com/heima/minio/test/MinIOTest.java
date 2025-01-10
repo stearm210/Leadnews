@@ -2,13 +2,8 @@ package com.heima.minio.test;
 
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
-import io.minio.errors.*;
-
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.security.InvalidKeyException;
-import java.security.NoSuchAlgorithmException;
+
 
 /**
  * @BelongsProject: heima-leadnews
@@ -42,6 +37,9 @@ public class MinIOTest {
                     .bucket("leadnews")//已经创建的桶名称，与minio界面中创建的一致
                     .stream(fileInputStream, fileInputStream.available(), -1).build();
             minioClient.putObject(putObjectArgs);
+
+            //访问路径
+           System.out.println("http://192.168.200.130:9000/leadnews/list.html");
         }catch (Exception e){
             e.printStackTrace();
         }
