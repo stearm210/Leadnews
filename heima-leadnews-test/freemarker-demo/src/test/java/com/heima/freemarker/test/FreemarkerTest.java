@@ -46,7 +46,7 @@ public class FreemarkerTest {
           * @Description: 合成方法
           */
         //第一个参数是模型数据，第二个参数是输出流
-        template.process(getDate(),new FileWriter("E:\\java study\\knowledge_picture\\黑马头条\\Test_output"));
+        template.process(getDate(),new FileWriter("E:\\java study\\knowledge_picture\\Test_output\\list.html"));
     }
 
     private Map getDate(){

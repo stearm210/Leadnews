@@ -77,8 +77,14 @@
 <hr>
 
 <#--today为controller中添加的函数对象-->
-当前的日期为：${today?datetime}
+<#--br为换行-->
+当前的日期为：${today?datetime}<br>
 当前的日期为：${today?string("yyyy年MM月")}
+
+---------------------------<br>
+<#--加上c防止显示逗号-->
+${point?c}
 
 </body>
 </html>
+
