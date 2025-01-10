@@ -1,6 +1,7 @@
 package com.heima.minio.test;
 
 import com.heima.file.service.FileStorageService;
+import com.heima.minio.MinIOApplication;
 import io.minio.MinioClient;
 import io.minio.PutObjectArgs;
 import org.junit.Test;
@@ -31,7 +32,7 @@ import java.io.FileNotFoundException;
   * @Description: 上传文件至minio中，并且可以在浏览器中访问
   */
 
-@SpringBootTest(classes = MinIOTest.class)
+@SpringBootTest(classes = MinIOApplication.class)
 @RunWith(SpringRunner.class)
 public class MinIOTest {
 
