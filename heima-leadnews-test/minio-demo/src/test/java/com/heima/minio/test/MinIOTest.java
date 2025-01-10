@@ -19,6 +19,9 @@ package com.heima.minio.test;
   */
 public class MinIOTest {
     public static void main(String[] args) {
+        //1.获取minio的连接信息，创建一个minio的客户端
+        M
+        //2.上传
 
     }
 }
