@@ -1,5 +1,15 @@
 package com.heima.minio.test;
 
+import io.minio.MinioClient;
+import io.minio.PutObjectArgs;
+import io.minio.errors.*;
+
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.security.InvalidKeyException;
+import java.security.NoSuchAlgorithmException;
+
 /**
  * @BelongsProject: heima-leadnews
  * @BelongsPackage: com.heima.minio.test
@@ -19,9 +29,21 @@ package com.heima.minio.test;
   */
 public class MinIOTest {
     public static void main(String[] args) {
-        //1.获取minio的连接信息，创建一个minio的客户端
-        M
-        //2.上传
+        try {
+            //需要上传的文件路径
+            FileInputStream fileInputStream = new FileInputStream("E:\\java study\\knowledge_picture\\Test_output\\list.html");
 
+            //1.获取minio的连接信息，创建一个minio的客户端
+            MinioClient minioClient = MinioClient.builder().credentials("minio", "minio123").endpoint("http://192.168.200.130:9000").build();
+            //2.上传
+            PutObjectArgs putObjectArgs = PutObjectArgs.builder()
+                    .object("list.html")//文件名称
+                    .contentType("text/html")//文件类型
+                    .bucket("leadnews")//已经创建的桶名称，与minio界面中创建的一致
+                    .stream(fileInputStream, fileInputStream.available(), -1).build();
+            minioClient.putObject(putObjectArgs);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
     }
 }
