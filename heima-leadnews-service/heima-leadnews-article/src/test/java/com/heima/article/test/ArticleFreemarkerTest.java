@@ -50,7 +50,7 @@ public class ArticleFreemarkerTest {
     public void createStaticUrlTest() throws Exception {
         //1.获取文章内容
         //通过apArticleContentMapper从数据库中查询ApArticleContent表中articleId等于1390536764510310401的那一条记录，并将查询结果封装到一个ApArticleContent对象中，赋值给变量apArticleContent
-        ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, 1390536764510310401L));
+        ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, 1383827787629252610L));
         //不存在文章时跳过生成html文件，或者没有内容时也将跳过生成
         if(apArticleContent != null && StringUtils.isNotBlank(apArticleContent.getContent())){
             //2.文章内容通过freemarker生成html文件
