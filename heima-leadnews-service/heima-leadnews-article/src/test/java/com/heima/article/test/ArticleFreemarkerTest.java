@@ -70,6 +70,7 @@ public class ArticleFreemarkerTest {
             InputStream is = new ByteArrayInputStream(out.toString().getBytes());
 
             //3.把html文件上传到minio中
+            //返回文件上传完成之后的路径
             String path = fileStorageService.uploadHtmlFile("", apArticleContent.getArticleId() + ".html", is);
 
             //4.修改ap_article表，保存static_url字段
