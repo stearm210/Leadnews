@@ -75,8 +75,10 @@ public class ArticleFreemarkerTest {
 
             //4.修改ap_article表，保存static_url字段
             ApArticle article = new ApArticle();
+            //对数据库表中的文章id和对应的文章地址进行保存
             article.setId(apArticleContent.getArticleId());
             article.setStaticUrl(path);
+            //保存对应的id
             apArticleMapper.updateById(article);
         }
     }
