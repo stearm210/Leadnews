@@ -17,6 +17,10 @@ import java.util.Optional;
  * @Description: TODO
  * @Version: 1.0
  */
+
+/*
+* 由于之前已经在token中得到了对应的信息并存入了header中，这时需要将对应的信息从header中取出来，这些取出的信息将会放在线程中，方便后续使用。下面是两个对线程的操作方法
+* */
 public class WmTokenInterceptor implements HandlerInterceptor {
 
      /*
