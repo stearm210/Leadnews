@@ -33,16 +33,13 @@ public class WmTokenInterceptor implements HandlerInterceptor {
         String userId = request.getHeader("userId");
         //判断对应的userid是否为空
         if (userId != null){
-
-        }
-        Optional<String> optional = Optional.ofNullable(userId);
-        if(optional.isPresent()){
             //把用户id存入threadloacl中
             WmUser wmUser = new WmUser();
             wmUser.setId(Integer.valueOf(userId));
             WmThreadLocalUtil.setUser(wmUser);
-            log.info("wmTokenFilter设置用户信息到threadlocal中...");
         }
+        Optional<String> optional = Optional.ofNullable(userId);
+
 
         return true;
     }
@@ -58,6 +55,6 @@ public class WmTokenInterceptor implements HandlerInterceptor {
       */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        return;
+        WmThreadLocalUtil.clear();
     }
 }
