@@ -7,6 +7,14 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class PageRequestDto {
 
+     /*
+      * @Title:
+      * @Author: pyzxW
+      * @Date: 2025-01-12 15:04:57
+      * @Params:
+      * @Return: null
+      * @Description: 分页的信息会被传入到这个地方
+      */
     protected Integer size;
     protected Integer page;
 
