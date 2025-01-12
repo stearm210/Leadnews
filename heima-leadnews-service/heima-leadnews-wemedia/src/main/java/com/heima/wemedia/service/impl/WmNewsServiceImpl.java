@@ -51,6 +51,7 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         IPage page = new Page(dto.getPage(),dto.getSize());
         //Lambda查询包装器lambdaQueryWrapper，用于构建查询条件。WmNews是实体类，代表要查询的表对应的Java对象。
         LambdaQueryWrapper<WmNews> lambdaQueryWrapper = new LambdaQueryWrapper<>();
+        //使用一个页面对象将查到的信息装起来
         page(page,lambdaQueryWrapper);
         //状态精确查询
         if (dto.getStatus() != null){
@@ -79,7 +80,7 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         page = page(page,lambdaQueryWrapper);
 
         //3.结果返回
-        //将上面的查询结果进行整合，统一进行返回
+        //之后，再将上面查到的page对象封装到一个ResponseRsult对象中，统一进行返回
         ResponseResult responseResult = new PageResponseResult(dto.getPage(),dto.getSize(),(int)page.getTotal());
         //设置时间
         responseResult.setData(page.getRecords());
