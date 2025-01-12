@@ -19,6 +19,15 @@ public class ArticleApplication {
         SpringApplication.run(ArticleApplication.class,args);
     }
 
+
+     /*
+      * @Title: mybatisPlusInterceptor
+      * @Author: pyzxW
+      * @Date: 2025-01-12 15:27:30
+      * @Params:
+      * @Return: null
+      * @Description: 主要用于使得分页实现的类
+      */
     @Bean
     public MybatisPlusInterceptor mybatisPlusInterceptor() {
         MybatisPlusInterceptor interceptor = new MybatisPlusInterceptor();
