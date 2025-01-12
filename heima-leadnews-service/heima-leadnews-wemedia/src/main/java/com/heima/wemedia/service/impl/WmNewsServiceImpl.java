@@ -1,6 +1,8 @@
 package com.heima.wemedia.service.impl;
 
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
@@ -26,6 +28,14 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
       */
     @Override
     public ResponseResult findAll(WmNewsPageReqDto dto) {
+        //1.检查参数
+        //分页检查
+        dto.checkParam();
+        //2.分页条件查询
+        IPage page = new Page(dto.getPage(),dto.getSize());
+        page(page);
+
+        //3.结果返回
         return null;
     }
 }
