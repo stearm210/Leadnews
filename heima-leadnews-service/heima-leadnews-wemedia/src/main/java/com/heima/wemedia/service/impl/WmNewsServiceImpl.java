@@ -62,18 +62,17 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
             lambdaQueryWrapper.eq(WmNews::getChannelId,dto.getChannelId());
         }
         //时间范围查询
-        if (dto.getBeginPubDate() != null && dto.getEndPubDate() != null){
-            //需要设置发布时间在开始时间和结束时间之间
+        if (dto.getBeginPubDate()!=null && dto.getEndPubDate()!=null){
             lambdaQueryWrapper.between(WmNews::getPublishTime,dto.getBeginPubDate(),dto.getEndPubDate());
         }
 
         //关键字模糊查询
-        if(StringUtils.isNotBlank(dto.getKeyword())){
+        if (StringUtils.isNotBlank(dto.getKeyword())){
             lambdaQueryWrapper.like(WmNews::getTitle,dto.getKeyword());
         }
 
         //查询当前登录人的文章
-        lambdaQueryWrapper.eq(WmNews::getUserId,WmThreadLocalUtil.getUser().getId());
+        lambdaQueryWrapper.eq(WmNews::getUserId,user.getId());
 
         //按照发布时间倒序查询
         lambdaQueryWrapper.orderByDesc(WmNews::getCreatedTime);
