@@ -92,7 +92,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         //2.分页查询
         IPage page = new Page(dto.getPage(),dto.getSize());
         LambdaQueryWrapper<WmMaterial> lambdaQueryWrapper = new LambdaQueryWrapper<>();
-        //是否收藏
+        //素材是否收藏
         if (dto.getIsCollection() != null && dto.getIsCollection() == 1){
             lambdaQueryWrapper.eq(WmMaterial::getIsCollection,dto.getIsCollection());
         }
@@ -103,6 +103,7 @@ public class WmMaterialServiceImpl extends ServiceImpl<WmMaterialMapper, WmMater
         page = page(page,lambdaQueryWrapper);
         //3.返回结果
         ResponseResult responseResult = new PageResponseResult(dto.getPage(),dto.getSize(),(int)page.getTotal());
+        //将查询得到的结果设置到responseResult中
         responseResult.setData(page.getRecords());
         return responseResult;
     }
