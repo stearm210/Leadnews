@@ -28,4 +28,16 @@ public class WmMaterialController {
     public ResponseResult uploadPicture(MultipartFile multipartFile){
         return wmMaterialService.uploadPicture(multipartFile);
     }
+
+     /*
+      * @Title: findList
+      * @Author: pyzxW
+      * @Date: 2025-01-12 15:09:32
+      * @Params:
+      * @Return: null
+      * @Description: 素材管理，接口定义.素材列表查询
+      */
+    public ResponseResult findList(){
+        return null;
+    }
 }
