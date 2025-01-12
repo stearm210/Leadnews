@@ -38,7 +38,6 @@ public class WmMaterialController {
     //使用@RequestBody注解，将请求体中的json数据封装到dto对象中
     @PostMapping("/list")
     public ResponseResult findList(@RequestBody WmMaterialDto dto){
-
-        return null;
+        return wmMaterialService.findList(dto);
     }
 }
