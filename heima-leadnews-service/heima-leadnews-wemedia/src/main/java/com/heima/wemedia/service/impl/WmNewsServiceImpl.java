@@ -149,7 +149,7 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
 
         //4.不是草稿，保存文章封面图片与素材之间的关系
 
-        return null;
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
      /*
