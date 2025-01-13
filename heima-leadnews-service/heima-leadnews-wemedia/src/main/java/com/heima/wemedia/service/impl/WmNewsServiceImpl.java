@@ -9,6 +9,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.model.wemedia.pojos.WmUser;
@@ -84,5 +85,26 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         //设置时间
         responseResult.setData(page.getRecords());
         return responseResult;
+    }
+
+     /*
+      * @Title: submitNews
+      * @Author: pyzxW
+      * @Date: 2025-01-13 11:37:11
+      * @Params:
+      * @Return: null
+      * @Description: 发布修改文章或保存为草稿
+      */
+    @Override
+    public ResponseResult submitNews(WmNewsDto dto) {
+        //1.保存或者修改文章
+
+        //2.判断是否为草稿，如果是草稿则结束当前方法
+
+        //3.不是草稿，保存文章内容图片与素材的关系
+
+        //4.不是草稿，保存文章封面图片与素材之间的关系
+
+        return null;
     }
 }
