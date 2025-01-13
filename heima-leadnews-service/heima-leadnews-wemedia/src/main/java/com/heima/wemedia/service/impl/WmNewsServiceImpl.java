@@ -17,6 +17,7 @@ import com.heima.utils.thread.WmThreadLocalUtil;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -97,7 +98,28 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
       */
     @Override
     public ResponseResult submitNews(WmNewsDto dto) {
+        //0.条件判断
+        if (dto == null || dto.getContent() == null){
+            //返回参数失效
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
         //1.保存或者修改文章
+        //定义对象
+        WmNews wmNews = new WmNews();
+        //属性拷贝
+        BeanUtils.copyProperties(dto,wmNews);
+        //封面图片 List--->string 处理
+        if (dto.getImages() != null && dto.getImages().size() > 0){
+            String imageStr = org.apache.commons.lang.StringUtils.join(dto.getImages(), ",");
+            //在对应的数据库设置图片的名字属性
+            wmNews.setImages(imageStr);
+        }
+        //如果当前封面类型为自动 -1
+        //先设置为null过度
+        if(dto.getType().equals(-1)){
+            wmNews.setType(null);
+        }
 
         //2.判断是否为草稿，如果是草稿则结束当前方法
 
