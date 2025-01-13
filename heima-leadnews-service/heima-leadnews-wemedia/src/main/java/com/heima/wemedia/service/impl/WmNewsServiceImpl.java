@@ -1,7 +1,5 @@
 package com.heima.wemedia.service.impl;
 
-
-import com.alibaba.cloud.commons.lang.StringUtils;
 import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
@@ -25,6 +23,7 @@ import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.mapper.WmNewsMaterialMapper;
 import com.heima.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -147,9 +146,55 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         List<String> materials = ectractUrlInfo(dto.getContent());
         saveRelativeInfoForContent(materials,wmNews.getId());
 
-        //4.不是草稿，保存文章封面图片与素材之间的关系
+        //4.不是草稿，保存文章封面图片与素材的关系，如果当前布局是自动，需要匹配封面图片
+        saveRelativeInfoForCover(dto,wmNews,materials);
 
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+    }
+
+     /*
+      * @Title: saveRelativeInfoForCover
+      * @Author: pyzxW
+      * @Date: 2025-01-13 15:39:45
+      * @Params:  
+      * @Return: null
+      * @Description:
+      * 第一个功能：如果当前封面类型为自动，则设置封面类型的数据
+      * 匹配规则：
+      * 1，如果内容图片大于等于1，小于3  单图  type 1
+      * 2，如果内容图片大于等于3  多图  type 3
+      * 3，如果内容没有图片，无图  type 0
+      *
+      * 第二个功能：保存封面图片与素材的关系
+      */
+    private void saveRelativeInfoForCover(WmNewsDto dto, WmNews wmNews, List<String> materials){
+        List<String> images = dto.getImages();
+        //如果当前封面类型为自动，则设置封面类型的数据
+        if (dto.getType().equals(WemediaConstants.WM_NEWS_TYPE_AUTO)) {
+            //多图
+            if (materials.size() >= 3) {
+                wmNews.setType(WemediaConstants.WM_NEWS_MANY_IMAGE);
+                //截取3张对应的图片
+                images = materials.stream().limit(3).collect(Collectors.toList());
+            } else if (materials.size() >= 1 && materials.size() < 3) {
+                //单图
+                wmNews.setType(WemediaConstants.WM_NEWS_SINGLE_IMAGE);
+                //截取获得1张图片
+                images = materials.stream().limit(1).collect(Collectors.toList());
+            } else {
+                //无图
+                wmNews.setType(WemediaConstants.WM_NEWS_NONE_IMAGE);
+            }
+            //修改文章
+            if (images != null && images.size() > 0) {
+                wmNews.setImages(org.apache.commons.lang3.StringUtils.join(images, ","));
+            }
+            updateById(wmNews);
+        }
+        //2.保存封面图片与素材的关系
+        if(images != null && images.size() > 0){
+            saveRelativeInfo(images,wmNews.getId(),WemediaConstants.WM_COVER_REFERENCE);
+        }
     }
 
      /*
