@@ -2,24 +2,39 @@ package com.heima.wemedia.service.impl;
 
 
 import com.alibaba.cloud.commons.lang.StringUtils;
+import com.alibaba.fastjson.JSON;
 import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.heima.common.constants.WemediaConstants;
+import com.heima.common.exception.CustomException;
 import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.wemedia.dtos.WmNewsDto;
 import com.heima.model.wemedia.dtos.WmNewsPageReqDto;
+import com.heima.model.wemedia.pojos.WmMaterial;
 import com.heima.model.wemedia.pojos.WmNews;
+import com.heima.model.wemedia.pojos.WmNewsMaterial;
 import com.heima.model.wemedia.pojos.WmUser;
 import com.heima.utils.thread.WmThreadLocalUtil;
+import com.heima.wemedia.mapper.WmMaterialMapper;
 import com.heima.wemedia.mapper.WmNewsMapper;
+import com.heima.wemedia.mapper.WmNewsMaterialMapper;
 import com.heima.wemedia.service.WmNewsService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -117,16 +132,119 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         }
         //如果当前封面类型为自动 -1
         //先设置为null过度
-        if(dto.getType().equals(-1)){
+        if(dto.getType().equals(WemediaConstants.WM_NEWS_TYPE_AUTO)){
             wmNews.setType(null);
         }
+        //调用保存或者修改文章函数
+        saveOrUpdateWmNews(wmNews);
 
         //2.判断是否为草稿，如果是草稿则结束当前方法
-
+        if (dto.getStatus().equals(WmNews.Status.NORMAL.getCode())){
+            return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
+        }
         //3.不是草稿，保存文章内容图片与素材的关系
+        //获取到文章内容中的图片信息
+        List<String> materials = ectractUrlInfo(dto.getContent());
+        saveRelativeInfoForContent(materials,wmNews.getId());
 
         //4.不是草稿，保存文章封面图片与素材之间的关系
 
         return null;
     }
+
+     /*
+      * @Title: saveRelativeInfoForContent
+      * @Author: pyzxW
+      * @Date: 2025-01-13 14:55:36
+      * @Params:  
+      * @Return: null
+      * @Description: 处理文章内容与素材之间的关系
+      */
+    private void saveRelativeInfoForContent(List<String> materials, Integer id){
+        saveRelativeInfo(materials,id,WemediaConstants.WM_CONTENT_REFERENCE);
+    }
+
+    @Autowired
+    private WmMaterialMapper wmMaterialMapper;
+     /*
+      * @Title: saveRelativeInfo
+      * @Author: pyzxW
+      * @Date: 2025-01-13 15:01:02
+      * @Params:
+      * @Return: null
+      * @Description: 保存文章图片与素材的关系到数据库中
+      */
+    private void saveRelativeInfo(List<String> materials, Integer newsId, Short type) {
+        if(materials!=null && !materials.isEmpty()){
+            //通过图片的url查询素材的id
+            List<WmMaterial> dbMaterials = wmMaterialMapper.selectList(Wrappers.<WmMaterial>lambdaQuery().in(WmMaterial::getUrl, materials));
+
+            //判断素材是否有效
+            if (dbMaterials == null || dbMaterials.size() == 0){
+                //手动抛出异常   第一个功能：能够提示调用者素材失效了，第二个功能，进行数据的回滚
+                throw new CustomException(AppHttpCodeEnum.MATERIASL_REFERENCE_FAIL);
+            }
+
+            if(materials.size() != dbMaterials.size()){
+                throw new CustomException(AppHttpCodeEnum.MATERIASL_REFERENCE_FAIL);
+            }
+
+            List<Integer> idList = dbMaterials.stream().map(WmMaterial::getId).collect(Collectors.toList());
+
+            //批量保存
+            wmNewsMaterialMapper.saveRelations(idList,newsId,type);
+        }
+    }
+     /*
+      * @Title: ectractUrlInfo
+      * @Author: pyzxW
+      * @Date: 2025-01-13 14:48:20
+      * @Params:
+      * @Return: null
+      * @Description: 提取当前文章内容中的图片信息
+      */
+    private List<String> ectractUrlInfo(String content){
+        //图片路径list集合
+        List<String> materials = new ArrayList<>();
+        //mao用于方便循环操作
+        List<Map> maps = JSON.parseArray(content, Map.class);
+        for (Map map : maps) {
+            if(map.get("type").equals("image")){
+                //图片路径获取
+                String imgUrl = (String) map.get("value");
+                materials.add(imgUrl);
+            }
+        }
+        return materials;
+    }
+
+    @Autowired
+    private WmNewsMaterialMapper wmNewsMaterialMapper;
+
+     /*
+      * @Title: saveOrUpdateWmNews
+      * @Author: pyzxW
+      * @Date: 2025-01-13 14:28:50
+      * @Params:
+      * @Return: null
+      * @Description: 保存或者修改文章
+      */
+    private void saveOrUpdateWmNews(WmNews wmNews){
+       //补全属性
+        wmNews.setUserId(WmThreadLocalUtil.getUser().getId());
+        wmNews.setCreatedTime(new Date());
+        wmNews.setSubmitedTime(new Date());
+        wmNews.setEnable((short)1);//默认上架
+
+        if (wmNews.getId() == null){
+            //保存
+            save(wmNews);
+        }else {
+            //修改
+            //删除文章图片与素材的关联关系
+            wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId,wmNews.getId()));
+            updateById(wmNews);
+        }
+    }
+
 }
