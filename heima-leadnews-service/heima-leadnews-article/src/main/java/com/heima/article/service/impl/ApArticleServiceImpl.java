@@ -1,6 +1,7 @@
 package com.heima.article.service.impl;
 
 import com.alibaba.cloud.commons.lang.StringUtils;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.article.mapper.ApArticleConfigMapper;
 import com.heima.article.mapper.ApArticleContentMapper;
@@ -11,6 +12,7 @@ import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.article.pojos.ApArticleConfig;
+import com.heima.model.article.pojos.ApArticleContent;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import lombok.extern.slf4j.Slf4j;
@@ -125,16 +127,26 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             ApArticleConfig apArticleConfig = new ApArticleConfig(apArticle.getId());
             apArticleConfigMapper.insert(apArticleConfig);
             //保存文章内容
-
+            ApArticleContent apArticleContent = new ApArticleContent();
+            apArticleContent.setArticleId(apArticle.getId());
+            apArticleContent.setContent(dto.getContent());
+            apArticleContentMapper.insert(apArticleContent);
 
         }else {
             //2.2 存在id   修改文章  修改文章内容
+            //修改  文章
+            updateById(apArticle);
 
+            //修改文章内容
+            //获取文章内容
+            ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, dto.getId()));
+            //进行修改
+            apArticleContent.setContent(dto.getContent());
+            //更新
+            apArticleContentMapper.updateById(apArticleContent);
         }
 
         //3.结果返回  文章的id
-        return null;
+        return ResponseResult.okResult(apArticle.getId());
     }
-
-
 }
