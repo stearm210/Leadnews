@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.ApArticleService;
 import com.heima.common.constants.ArticleConstants;
+import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.common.dtos.ResponseResult;
@@ -82,4 +83,24 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         //返回最终的结果，封装于ResponseResult
         return ResponseResult.okResult(articleList);
     }
+
+     /*
+      * @Title: saveArticle
+      * @Author: pyzxW
+      * @Date: 2025-01-15 15:29:25
+      * @Params:
+      * @Return: null
+      * @Description: 保存app端相关文章
+      */
+    @Override
+    public ResponseResult saveArticle(ArticleDto dto) {
+        //1.检查参数
+
+        //2.判断是否存在id
+
+
+        return null;
+    }
+
+
 }
