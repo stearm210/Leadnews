@@ -72,6 +72,12 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             //4.审核成功，保存app端的相关文章数据
             //调用保存方法
             ResponseResult responseResult = saveAppArticle(wmNews);
+            if (!responseResult.getCode().equals(200)){
+                throw new RuntimeException("WmNewsAutoScanServiceImpl-文章审核，保存app端相关文章数据失败");
+            }
+            //回填atricle_id
+            wmNews.setArticleId((Long) responseResult.getData());
+            updateWmNews(wmNews,(short) 9,"审核成功");
         }
     }
 
