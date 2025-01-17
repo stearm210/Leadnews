@@ -1,6 +1,7 @@
 package com.heima.wemedia.service.impl;
 
 import com.alibaba.fastjson.JSONArray;
+import com.heima.common.aliyun.GreenTextScan;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.wemedia.mapper.WmNewsMapper;
 import com.heima.wemedia.service.WmNewsAutoScanService;
@@ -42,19 +43,53 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         if (wmNews == null){
             throw new RuntimeException("WmNewsAutoScanServiceImpl-文章不存在");
         }
+        //需要注意，这里必须为文章待审核的状态
+        if (wmNews.getStatus().equals(WmNews.Status.SUBMIT.getCode())){
+            //从内容中提取纯文本内容和图片
+            Map<String,Object> textAndImages = handleTextAndImages(wmNews);
+            //2.审核文本内容
+            //返回一个布尔值来判定是否审核成功或者失败
+            boolean isTextScan = handleTextScan((String) textAndImages.get("content"), wmNews);
+            if (!isTextScan){
+                return;//失败时的状态
+            }
+            //3.审核图片内容
 
-        //从内容中提取纯文本内容和图片
-        Map<String,Object> textAndImages = handleTextAndImages(wmNews);
-        //2.审核文本内容
+            //4.审核成功，保存app端的相关文章数据
+        }
+    }
 
-        //3.审核图片内容
+    @Autowired
+    private GreenTextScan greenTextScan;
+     /*
+      * @Title: handleTextScan
+      * @Author: pyzxW
+      * @Date: 2025-01-17 16:36:13
+      * @Params:  
+      * @Return: null
+      * @Description: 审核纯文本内容
+      */
+    private boolean handleTextScan(String content, WmNews wmNews) {
+        try {
+            Map map = greenTextScan.greeTextScan(content);
+            if (map != null){
+                //审核失败
+                if (map.get("suggestion").equals("block")){
 
-        //4.审核成功，保存app端的相关文章数据
+                }
+                //不确定信息 需要人工审核
+                if (map.get("suggestion").equals("review")){
+
+                }
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
 
 
     }
 
-     /*
+    /*
       * @Title: handleTextAndImages
       * @Author: pyzxW
       * @Date: 2025-01-16 16:01:48
@@ -76,7 +111,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
                 if (map.get("type").equals("text")){
                     stringBuilder.append(map.get("value"));
                 }
-
                 if (map.get("type").equals("image")){
                     images.add((String) map.get("value"));
                 }
