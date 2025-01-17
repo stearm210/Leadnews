@@ -75,11 +75,12 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             if (map != null){
                 //审核失败
                 if (map.get("suggestion").equals("block")){
-
+                    wmNews.setStatus((short)2);
                 }
                 //不确定信息 需要人工审核
                 if (map.get("suggestion").equals("review")){
-
+                    //人工审核信息
+                    wmNews.setStatus((short)3);
                 }
             }
         } catch (Exception e) {
