@@ -147,10 +147,9 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
             //修改文章内容
             //获取文章内容
+            // 修改文章内容
             ApArticleContent apArticleContent = apArticleContentMapper.selectOne(Wrappers.<ApArticleContent>lambdaQuery().eq(ApArticleContent::getArticleId, dto.getId()));
-            //进行修改
             apArticleContent.setContent(dto.getContent());
-            //更新
             apArticleContentMapper.updateById(apArticleContent);
         }
 

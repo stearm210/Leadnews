@@ -18,6 +18,6 @@ public class WmNewsAutoScanServiceTest {
     @Test
     public void autoScanWmNews() {
         //随便在数据库中找到一个文章的id测试
-        wmNewsAutoScanService.autoScanWmNews(6232);
+        wmNewsAutoScanService.autoScanWmNews(6233);
     }
 }

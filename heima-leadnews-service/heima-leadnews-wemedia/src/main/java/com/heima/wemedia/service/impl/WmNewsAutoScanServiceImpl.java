@@ -60,14 +60,17 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         if (wmNews.getStatus().equals(WmNews.Status.SUBMIT.getCode())){
             //从内容中提取纯文本内容和图片
             Map<String,Object> textAndImages = handleTextAndImages(wmNews);
+            //由于阿里云问题，这里就全部设置为true
             //2.审核文本内容
             //返回一个布尔值来判定是否审核成功或者失败
-            boolean isTextScan = handleTextScan((String) textAndImages.get("content"), wmNews);
+            //boolean isTextScan = handleTextScan((String) textAndImages.get("content"), wmNews);
+            boolean isTextScan = true;
             if (!isTextScan){
                 return;//失败时的状态
             }
             //3.审核图片内容
-            boolean isImageScan = handleImagesScan((List<String>) textAndImages.get("images"), wmNews);
+            //boolean isImageScan = handleImagesScan((List<String>) textAndImages.get("images"), wmNews);
+            boolean isImageScan = true;
             if (!isImageScan){
                 return;//失败时的状态
             }
@@ -186,9 +189,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             flag = false;
             e.printStackTrace();
         }
-        //由于阿里云信息不能使用，这里直接就返回true了
-        //return flag;
-        return true;
+        return flag;
     }
 
     @Autowired
@@ -229,9 +230,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             flag = false;
             e.printStackTrace();
         }
-        //由于阿里云信息不能使用，这里直接就返回true了
-        //return flag;
-        return true;
+        return flag;
     }
 
      /*
