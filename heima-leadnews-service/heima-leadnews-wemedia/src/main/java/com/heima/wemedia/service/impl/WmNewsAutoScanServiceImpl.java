@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.apis.article.IArticleClient;
 import com.heima.common.aliyun.GreenImageScan;
 import com.heima.common.aliyun.GreenTextScan;
+import com.heima.common.tess4j.Tess4jClient;
 import com.heima.file.service.FileStorageService;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.common.dtos.ResponseResult;
@@ -26,6 +27,9 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -47,6 +51,9 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     private GreenImageScan greenImageScan;
     @Autowired
     private GreenTextScan greenTextScan;
+    //图片识别操作
+    @Autowired
+    private Tess4jClient tess4jClient;
 
 
     /**
@@ -74,7 +81,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             Map<String, Object> textAndImages = handleTextAndImages(wmNews);
 
             //自备的敏感词管理过滤操作
-            boolean isSensitive = handleSensitivateScan((String)textAndImages.get("content"), wmNews);
+            boolean isSensitive = handleSensitiveScan((String)textAndImages.get("content"), wmNews);
             //审核失败直接返回
             if (!isSensitive) return;
 
@@ -109,7 +116,7 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
       * @Return: null
       * @Description: 自备的敏感词管理的审核操作
       */
-    private boolean handleSensitivateScan(String content, WmNews wmNews) {
+    private boolean handleSensitiveScan(String content, WmNews wmNews) {
         //创建变量，定义是否包含敏感词
         boolean flag = true;
         //1. 获取敏感词
@@ -190,10 +197,29 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         images = images.stream().distinct().collect(Collectors.toList());
         List<byte[]> imageList = new ArrayList<>();
 
-        for (String image : images) {
-            byte[] bytes = fileStorageService.downLoadFile(image);
-            imageList.add(bytes);
+
+        try {
+            for (String image : images) {
+                byte[] bytes = fileStorageService.downLoadFile(image);
+
+                //图片识别操作
+                //从byte[]转换为butteredImage
+                ByteArrayInputStream in = new ByteArrayInputStream(bytes);
+                BufferedImage imageFile = ImageIO.read(in);
+                //识别图片的文字
+                String result = tess4jClient.doOCR(imageFile);
+                //审核是否包含自管理的敏感词
+                boolean isSensitive = handleSensitiveScan(result, wmNews);
+                if(!isSensitive){
+                    return isSensitive;
+                }
+                //图片识别文字审核---end-----
+                imageList.add(bytes);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
 
         // 审核图片
         try {
