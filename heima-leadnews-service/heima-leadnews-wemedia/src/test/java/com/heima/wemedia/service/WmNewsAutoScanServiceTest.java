@@ -1,0 +1,22 @@
+package com.heima.wemedia.service;
+
+import org.junit.jupiter.api.Test;
+import org.junit.runner.RunWith;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.context.junit4.SpringRunner;
+
+import static org.junit.jupiter.api.Assertions.*;
+
+@SpringBootTest(classes = WmNewsAutoScanService.class)
+@RunWith(SpringRunner.class)
+class WmNewsAutoScanServiceTest {
+    @Autowired
+    private WmNewsAutoScanService wmNewsAutoScanService;
+
+    @Test
+    public void autoScanWmNews() {
+        //随便在数据库中找到一个文章的id测试
+        wmNewsAutoScanService.autoScanWmNews(6232);
+    }
+}
