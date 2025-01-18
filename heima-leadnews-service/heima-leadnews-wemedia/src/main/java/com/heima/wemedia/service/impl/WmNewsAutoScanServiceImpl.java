@@ -197,7 +197,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         images = images.stream().distinct().collect(Collectors.toList());
         List<byte[]> imageList = new ArrayList<>();
 
-
         try {
             for (String image : images) {
                 byte[] bytes = fileStorageService.downLoadFile(image);
