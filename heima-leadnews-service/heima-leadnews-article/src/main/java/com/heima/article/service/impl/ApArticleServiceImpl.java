@@ -111,7 +111,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         //用于测试操作
         //当线程睡眠为3秒时，则会触发对应的服务降级策略
 //        try {
-//            Thread.sleep(3000);
+//            Thread.sleep(1000);
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
