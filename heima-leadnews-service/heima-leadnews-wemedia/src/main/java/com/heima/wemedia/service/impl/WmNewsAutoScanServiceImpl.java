@@ -186,7 +186,9 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             flag = false;
             e.printStackTrace();
         }
-        return flag;
+        //由于阿里云信息不能使用，这里直接就返回true了
+        //return flag;
+        return true;
     }
 
     @Autowired
@@ -227,7 +229,9 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
             flag = false;
             e.printStackTrace();
         }
-        return flag;
+        //由于阿里云信息不能使用，这里直接就返回true了
+        //return flag;
+        return true;
     }
 
      /*
