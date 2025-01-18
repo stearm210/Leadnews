@@ -108,6 +108,14 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
 
     @Override
     public ResponseResult saveArticle(ArticleDto dto) {
+        //用于测试操作
+        //当线程睡眠为3秒时，则会触发对应的服务降级策略
+        try {
+            Thread.sleep(3000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         //1.检查参数
         //当不存在文章时
         if(dto == null){
