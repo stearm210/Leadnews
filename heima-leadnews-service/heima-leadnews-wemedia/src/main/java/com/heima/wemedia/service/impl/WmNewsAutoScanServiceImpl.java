@@ -52,6 +52,13 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
     @Async //需要进行异步调用
     @Override
     public void autoScanWmNews(Integer id) {
+        //这里异步调用可能会导致： 若上一步saveRelativeInfoForCover()方法 还没成功保存wmNews，这里通过id 查不到wmNews而为null， 可以设置一个线程睡眠1秒。
+        //设置的查询时间原本在nacos中为2s，这里延迟1s防止报错
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         // 1. 查询自媒体文章
         WmNews wmNews = wmNewsMapper.selectById(id);
         if(wmNews == null) {

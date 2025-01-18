@@ -151,6 +151,12 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         saveRelativeInfoForContent(materials,wmNews.getId());
 
         //4.不是草稿，保存文章封面图片与素材的关系，如果当前布局是自动，需要匹配封面图片
+        //设置一个线程睡眠一秒
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         saveRelativeInfoForCover(dto,wmNews,materials);
 
         //在文章发布成功后调用审核的方法
