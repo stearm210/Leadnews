@@ -153,6 +153,9 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             apArticleContentMapper.updateById(apArticleContent);
         }
 
+        //异步调用，生成静态文件上传到minio中
+
+
         //3.结果返回  文章的id
         return ResponseResult.okResult(apArticle.getId());
     }
