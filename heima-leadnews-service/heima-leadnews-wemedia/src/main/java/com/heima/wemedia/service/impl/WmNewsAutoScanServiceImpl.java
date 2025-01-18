@@ -200,7 +200,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         try {
             for (String image : images) {
                 byte[] bytes = fileStorageService.downLoadFile(image);
-
                 //图片识别操作
                 //从byte[]转换为butteredImage
                 ByteArrayInputStream in = new ByteArrayInputStream(bytes);
@@ -218,7 +217,6 @@ public class WmNewsAutoScanServiceImpl implements WmNewsAutoScanService {
         }catch (Exception e){
             e.printStackTrace();
         }
-
 
         // 审核图片
         try {
