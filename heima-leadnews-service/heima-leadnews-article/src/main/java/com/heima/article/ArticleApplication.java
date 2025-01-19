@@ -21,7 +21,6 @@ public class ArticleApplication {
         SpringApplication.run(ArticleApplication.class,args);
     }
 
-
      /*
       * @Title: mybatisPlusInterceptor
       * @Author: pyzxW
