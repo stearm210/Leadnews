@@ -31,6 +31,12 @@ public class TaskServiceImpl implements TaskService {
         //1.添加任务到数据库中
 
         //2.添加任务到redis中
+        //2.1 如果任务的执行时间小于等于当前时间，存入list
+        //这表示立即执行此任务
+
+
+        //2.2 如果任务的执行时间大于当前时间，同时小于预设时间(未来5分钟)，存入zset
+        //这表示是延迟任务
 
         return 0;
     }
