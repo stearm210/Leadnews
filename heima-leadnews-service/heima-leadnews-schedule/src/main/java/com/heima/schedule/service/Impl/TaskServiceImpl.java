@@ -28,6 +28,9 @@ public class TaskServiceImpl implements TaskService {
       */
     @Override
     public long addTask(Task task) {
+        //1.添加任务到数据库中
+
+        //2.添加任务到redis中
 
         return 0;
     }
