@@ -10,6 +10,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.Date;
+import java.util.Set;
 
 /**
  * @BelongsProject: heima-leadnews
@@ -56,4 +57,13 @@ public class TaskServiceImplTest {
         Task task = taskService.pull(100, 50);
         System.out.println(task);
     }
+
+//    @Test
+//    public void testKeys(){
+//        Set<String> keys = cacheService.keys("future_*");
+//        System.out.println(keys);
+//
+//        Set<String> scan = cacheService.scan("future_*");
+//        System.out.println(scan);
+//    }
 }
