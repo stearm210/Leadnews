@@ -59,14 +59,16 @@ public class TaskServiceImpl implements TaskService {
       */
     @Override
     public boolean cancelTask(long taskId) {
+        boolean flag = false;
         //1.删除任务，更新任务日志
         Task task = updateDb(taskId,ScheduleConstants.CANCELLED);
         //2.删除redis中的数据
         if (task != null){
             //删除任务抽出一个方法
             removeTaskFromCache(task);
+            flag = true;
         }
-        return false;
+        return flag;
     }
 
      /*

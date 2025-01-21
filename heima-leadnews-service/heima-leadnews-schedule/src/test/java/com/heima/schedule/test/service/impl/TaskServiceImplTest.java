@@ -38,4 +38,17 @@ public class TaskServiceImplTest {
         System.out.println(taskId);
     }
 
+     /*
+      * @Title: cancelTask
+      * @Author: pyzxW
+      * @Date: 2025-01-21 15:07:31
+      * @Params:
+      * @Return: null
+      * @Description: 删除操作
+      */
+//    @Test
+//    public void cancelTask(){
+//        taskService.cancelTask(1881594079263883266L);
+//    }
+
 }
