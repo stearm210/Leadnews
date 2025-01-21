@@ -62,6 +62,7 @@ public class TaskServiceImpl implements TaskService {
       * @Description: 添加任务至redis中
       */
     private void addTaskToCache(Task task) {
+        //key是一个标签
         String key = task.getTaskType() + "_" + task.getPriority();
         //获取5分钟之后的时间
         Calendar calendar = Calendar.getInstance();
