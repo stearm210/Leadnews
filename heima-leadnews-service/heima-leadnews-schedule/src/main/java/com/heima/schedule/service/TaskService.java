@@ -22,4 +22,14 @@ public interface TaskService {
       * @Description: 取消任务
       */
     public boolean cancelTask(long taskId);
+
+     /*
+      * @Title: pull
+      * @Author: pyzxW
+      * @Date: 2025-01-21 15:09:45
+      * @Params:
+      * @Return: null
+      * @Description: 按照类型和优先级拉取任务
+      */
+    public Task pull(int type, int priority);
 }
