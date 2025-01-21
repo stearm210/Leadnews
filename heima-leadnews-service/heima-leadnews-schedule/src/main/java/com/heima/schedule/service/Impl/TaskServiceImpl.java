@@ -15,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Calendar;
 import java.util.Date;
 
 /**
@@ -61,18 +62,23 @@ public class TaskServiceImpl implements TaskService {
       * @Description: 添加任务至redis中
       */
     private void addTaskToCache(Task task) {
-
-
         String key = task.getTaskType() + "_" + task.getPriority();
+        //获取5分钟之后的时间
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,5);
+        long nextSchedule = calendar.getTimeInMillis();
+
         //2.1 如果任务的执行时间小于等于当前时间，存入list
         //这表示立即执行此任务
         if (task.getExecuteTime() <= System.currentTimeMillis()){
             //task转换一下类型方便存入list集合中
             cacheService.lLeftPush(ScheduleConstants.TOPIC + key, JSON.toJSONString(task));
+        }else if (task.getExecuteTime() <= nextSchedule){
+            //2.2 如果任务的执行时间大于当前时间，同时小于预设时间(未来5分钟)，存入zset
+            //这表示是延迟任务
+            cacheService.zAdd(ScheduleConstants.FUTURE + key, JSON.toJSONString(task), task.getExecuteTime());
         }
 
-        //2.2 如果任务的执行时间大于当前时间，同时小于预设时间(未来5分钟)，存入zset
-        //这表示是延迟任务
     }
 
     @Autowired
