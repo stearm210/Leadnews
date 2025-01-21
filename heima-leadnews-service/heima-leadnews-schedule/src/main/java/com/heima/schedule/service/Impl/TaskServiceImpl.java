@@ -59,7 +59,40 @@ public class TaskServiceImpl implements TaskService {
       */
     @Override
     public boolean cancelTask(long taskId) {
+        //1.删除任务，更新任务日志
+        Task task = updateDb(taskId,ScheduleConstants.CANCELLED);
+        //2.删除redis中的数据
+
         return false;
+    }
+
+     /*
+      * @Title: updateDb
+      * @Author: pyzxW
+      * @Date: 2025-01-21 14:52:55
+      * @Params:
+      * @Return: null
+      * @Description: 删除任务，更新任务日志
+      */
+    private Task updateDb(long taskId, int status) {
+        Task task = null;
+        try {
+            //删除任务
+            taskinfoMapper.deleteById(taskId);
+            //更新任务日志，获取对应的任务日志信息
+            TaskinfoLogs taskinfoLogs = taskinfoLogsMapper.selectById(taskId);
+            taskinfoLogs.setStatus(status);
+            //更新数据库
+            taskinfoLogsMapper.updateById(taskinfoLogs);
+
+            task = new Task();
+            //将对应的信息传递到task中
+            BeanUtils.copyProperties(taskinfoLogs,task);
+            task.setExecuteTime(taskinfoLogs.getExecuteTime().getTime());
+        }catch (Exception e){
+            log.error("task cancel exception taskid={}",taskId);
+        }
+        return task;
     }
 
     @Autowired
