@@ -49,6 +49,19 @@ public class TaskServiceImpl implements TaskService {
         return task.getTaskId();
     }
 
+     /*
+      * @Title: cancelTask
+      * @Author: pyzxW
+      * @Date: 2025-01-21 14:50:03
+      * @Params:
+      * @Return: null
+      * @Description: 取消任务之操作
+      */
+    @Override
+    public boolean cancelTask(long taskId) {
+        return false;
+    }
+
     @Autowired
     private CacheService cacheService;
      /*
