@@ -45,10 +45,8 @@ public class TaskServiceImpl implements TaskService {
         if(success){
             //2.添加任务到redis中
             addTaskToCache(task);
-
         }
-
-        return 0;
+        return task.getTaskId();
     }
 
     @Autowired
@@ -106,6 +104,9 @@ public class TaskServiceImpl implements TaskService {
             //更变执行时间类型，方便时间从task表中导入到taskinfo表中
             taskinfo.setExecuteTime(new Date(task.getExecuteTime()));
             taskinfoMapper.insert(taskinfo);
+
+            //设置任务id
+            task.setTaskId(taskinfo.getTaskId());
 
             //保存任务日志数据
             TaskinfoLogs taskinfoLogs = new TaskinfoLogs();
