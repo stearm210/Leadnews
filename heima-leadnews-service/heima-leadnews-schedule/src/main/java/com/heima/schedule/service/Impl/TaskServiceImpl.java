@@ -62,11 +62,34 @@ public class TaskServiceImpl implements TaskService {
         //1.删除任务，更新任务日志
         Task task = updateDb(taskId,ScheduleConstants.CANCELLED);
         //2.删除redis中的数据
-
+        if (task != null){
+            //删除任务抽出一个方法
+            removeTaskFromCache(task);
+        }
         return false;
     }
 
      /*
+      * @Title: removeTaskFromCache
+      * @Author: pyzxW
+      * @Date: 2025-01-21 15:01:21
+      * @Params:
+      * @Return: null
+      * @Description: 删除redis中的数据
+      */
+    private void removeTaskFromCache(Task task) {
+        //key是一个标签，需要一个参数属性
+        String key = task.getTaskType() + "_" + task.getPriority();
+        if(task.getExecuteTime() <= System.currentTimeMillis()){
+            //删除当前的数据
+            cacheService.lRemove(ScheduleConstants.TOPIC+key,0,JSON.toJSONString(task));
+        }else {
+            //删除未来的数据
+            cacheService.zRemove(ScheduleConstants.FUTURE+key, JSON.toJSONString(task));
+        }
+    }
+
+    /*
       * @Title: updateDb
       * @Author: pyzxW
       * @Date: 2025-01-21 14:52:55
