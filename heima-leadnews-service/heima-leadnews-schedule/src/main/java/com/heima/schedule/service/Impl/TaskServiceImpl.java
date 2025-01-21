@@ -56,7 +56,8 @@ public class TaskServiceImpl implements TaskService {
             Set<String> tasks = cacheService.zRangeByScore(futureKey, 0, System.currentTimeMillis());
             //如果你添加到了当前的list中，则需要在未来的zset中删除对应的数据
             if (!tasks.isEmpty()) {
-                //将这些任务数据添加到消费者队列中
+                //将这些任务数据添加到消费者队列中，并且在zset中删除对应的数据
+                //refreshWithPipeline是对此封装的一个函数
                 cacheService.refreshWithPipeline(futureKey, topicKey, tasks);
                 System.out.println("成功的将" + futureKey + "下的当前需要执行的任务数据刷新到" + topicKey + "下");
             }
