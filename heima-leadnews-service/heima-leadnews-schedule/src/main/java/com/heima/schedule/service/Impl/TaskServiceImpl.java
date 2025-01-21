@@ -1,6 +1,8 @@
 package com.heima.schedule.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.heima.common.constants.ScheduleConstants;
+import com.heima.common.redis.CacheService;
 import com.heima.model.schedule.dtos.Task;
 import com.heima.model.schedule.pojos.Taskinfo;
 import com.heima.model.schedule.pojos.TaskinfoLogs;
@@ -39,16 +41,38 @@ public class TaskServiceImpl implements TaskService {
     public long addTask(Task task) {
         //1.添加任务到数据库中,抽出一个方法函数
         boolean success = addTaskToDb(task);
+        if(success){
+            //2.添加任务到redis中
+            addTaskToCache(task);
 
-        //2.添加任务到redis中
+        }
+
+        return 0;
+    }
+
+    @Autowired
+    private CacheService cacheService;
+     /*
+      * @Title: addTaskToCache
+      * @Author: pyzxW
+      * @Date: 2025-01-21 14:15:58
+      * @Params:
+      * @Return: null
+      * @Description: 添加任务至redis中
+      */
+    private void addTaskToCache(Task task) {
+
+
+        String key = task.getTaskType() + "_" + task.getPriority();
         //2.1 如果任务的执行时间小于等于当前时间，存入list
         //这表示立即执行此任务
-
+        if (task.getExecuteTime() <= System.currentTimeMillis()){
+            //task转换一下类型方便存入list集合中
+            cacheService.lLeftPush(ScheduleConstants.TOPIC + key, JSON.toJSONString(task));
+        }
 
         //2.2 如果任务的执行时间大于当前时间，同时小于预设时间(未来5分钟)，存入zset
         //这表示是延迟任务
-
-        return 0;
     }
 
     @Autowired
