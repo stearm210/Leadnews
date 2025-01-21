@@ -65,6 +65,7 @@ public class TaskServiceImpl implements TaskService {
       * @Description: 添加任务到数据库中,抽出一个方法函数
       */
     private boolean addTaskToDb(Task task){
+
         boolean flag = false;
         try{
             //保存任务表
