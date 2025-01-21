@@ -10,6 +10,7 @@ import com.heima.schedule.mapper.TaskinfoLogsMapper;
 import com.heima.schedule.mapper.TaskinfoMapper;
 import com.heima.schedule.service.TaskService;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -72,6 +73,33 @@ public class TaskServiceImpl implements TaskService {
     }
 
      /*
+      * @Title: pull
+      * @Author: pyzxW
+      * @Date: 2025-01-21 15:26:10
+      * @Params:
+      * @Return: null
+      * @Description: 按照类型和优先级拉取任务
+      */
+    @Override
+    public Task pull(int type, int priority) {
+        Task task = null;
+        try {
+            String key = type+"_"+priority;
+            //拉取任务
+            String task_json = cacheService.lRightPop(ScheduleConstants.TOPIC + key);
+            if(StringUtils.isNotBlank(task_json)){
+                task = JSON.parseObject(task_json, Task.class);
+                //更新数据库信息
+                updateDb(task.getTaskId(),ScheduleConstants.EXECUTED);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            log.error("poll task exception");
+        }
+        return task;
+    }
+
+    /*
       * @Title: removeTaskFromCache
       * @Author: pyzxW
       * @Date: 2025-01-21 15:01:21
