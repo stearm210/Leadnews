@@ -44,22 +44,27 @@ public class TaskServiceImpl implements TaskService {
     //每分钟执行一次
     @Scheduled(cron = "0 */1 * * * ?")
     public void refresh(){
-        //打印执行指定任务的操作
-        System.out.println(System.currentTimeMillis() / 1000 + "执行了定时任务");
-        //1.获取所有未来数据集合的key值
-        Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");
-        for (String futureKey : futureKeys){
-            //得到对应的topicKey,也就是名字。这里进行了名字的分割，方便操作
-            String topicKey = ScheduleConstants.TOPIC + futureKey.split(ScheduleConstants.FUTURE)[1];
-            //2.按照key和分值查询符合条件的数据
-            //获取该组key下当前需要消费的任务数据
-            Set<String> tasks = cacheService.zRangeByScore(futureKey, 0, System.currentTimeMillis());
-            //如果你添加到了当前的list中，则需要在未来的zset中删除对应的数据
-            if (!tasks.isEmpty()) {
-                //将这些任务数据添加到消费者队列中，并且在zset中删除对应的数据
-                //refreshWithPipeline是对此封装的一个函数
-                cacheService.refreshWithPipeline(futureKey, topicKey, tasks);
-                System.out.println("成功的将" + futureKey + "下的当前需要执行的任务数据刷新到" + topicKey + "下");
+        //实现加锁的操作
+        String token = cacheService.tryLock("FUTRUE_TASK_SYNC", 1000 * 30);
+        //如果成功的加锁
+        if (StringUtils.isNoneBlank(token)){
+            //打印执行指定任务的操作
+            System.out.println(System.currentTimeMillis() / 1000 + "执行了定时任务");
+            //1.获取所有未来数据集合的key值
+            Set<String> futureKeys = cacheService.scan(ScheduleConstants.FUTURE + "*");
+            for (String futureKey : futureKeys){
+                //得到对应的topicKey,也就是名字。这里进行了名字的分割，方便操作
+                String topicKey = ScheduleConstants.TOPIC + futureKey.split(ScheduleConstants.FUTURE)[1];
+                //2.按照key和分值查询符合条件的数据
+                //获取该组key下当前需要消费的任务数据
+                Set<String> tasks = cacheService.zRangeByScore(futureKey, 0, System.currentTimeMillis());
+                //如果你添加到了当前的list中，则需要在未来的zset中删除对应的数据
+                if (!tasks.isEmpty()) {
+                    //将这些任务数据添加到消费者队列中，并且在zset中删除对应的数据
+                    //refreshWithPipeline是对此封装的一个函数
+                    cacheService.refreshWithPipeline(futureKey, topicKey, tasks);
+                    System.out.println("成功的将" + futureKey + "下的当前需要执行的任务数据刷新到" + topicKey + "下");
+                }
             }
         }
     }
