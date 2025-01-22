@@ -8,9 +8,11 @@ import com.heima.model.schedule.dtos.Task;
 import com.heima.model.wemedia.pojos.WmNews;
 import com.heima.utils.common.ProtostuffUtil;
 import com.heima.wemedia.service.WmNewsTaskService;
+import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Async;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -66,7 +68,10 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
       * @Return: null
       * @Description: 消费任务，审核文章
       */
+
+    @Scheduled(fixedRate = 1000)
     @Override
+    @SneakyThrows
     public void scanNewsByTask() {
         log.info("文章审核---消费任务执行---begin---");
         //从延迟队列中获取任务
