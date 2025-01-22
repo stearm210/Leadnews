@@ -1,6 +1,7 @@
 package com.heima.schedule.service.Impl;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.common.constants.ScheduleConstants;
 import com.heima.common.redis.CacheService;
 import com.heima.model.schedule.dtos.Task;
@@ -17,8 +18,10 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -260,5 +263,55 @@ public class TaskServiceImpl implements TaskService {
             e.printStackTrace();
         }
         return flag;
+    }
+
+     /*
+      * @Title: reloadData
+      * @Author: pyzxW
+      * @Date: 2025-01-22 14:56:34
+      * @Params:
+      * @Return: null
+      * @Description: 数据库任务定时同步到redis中
+      */
+
+    //每五分钟执行一次
+    @Scheduled(cron = "0 */5 * * * ?")
+    //开机就执行这个方法
+    @PostConstruct
+    public void reloadData(){
+        //1.清理缓存中的数据 一共有两个：list和zset
+        clearCache();
+        //2.查询符合条件的任务，小于未来5分钟的数据
+        //获得当前的时间点
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.MINUTE,5);
+        //查询
+        List<Taskinfo> taskinfoList = taskinfoMapper.selectList(Wrappers.<Taskinfo>lambdaQuery().lt(Taskinfo::getExecuteTime, calendar.getTime()));
+        //3.将任务添加到redis中
+        if (taskinfoList != null && taskinfoList.size() > 0){
+           for (Taskinfo taskinfo : taskinfoList){
+               Task task = new Task();
+               //将taskinfo中的数据导入到task中
+               BeanUtils.copyProperties(taskinfo,task);
+               task.setExecuteTime(taskinfo.getExecuteTime().getTime());
+               addTaskToCache(task);
+           }
+        }
+    }
+    
+     /*
+      * @Title: clearCache
+      * @Author: pyzxW
+      * @Date: 2025-01-22 14:59:08
+      * @Params:  
+      * @Return: null
+      * @Description: 清理缓存中的数据 一共有两个：list和zset
+      */
+    public void clearCache(){
+        //删除对应的缓存
+        Set<String> futurekeys = cacheService.scan(ScheduleConstants.FUTURE + "*");
+        Set<String> topickeys = cacheService.scan(ScheduleConstants.TOPIC + "*");
+        cacheService.delete(futurekeys);
+        cacheService.delete(topickeys);
     }
 }
