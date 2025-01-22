@@ -40,6 +40,7 @@ public interface IScheduleClient {
      * @Return: null
      * @Description: 按照类型和优先级拉取任务
      */
-    @GetMapping("/api/v1/task/poll/{type}/{priority}")
+    //到底是使用poll还是pull争议还是挺大的，不知道前端是怎么配置的
+    @GetMapping("/api/v1/task/pull/{type}/{priority}")
     public ResponseResult pull(@PathVariable("type") int type,@PathVariable("priority")  int priority);
 }

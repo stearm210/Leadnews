@@ -33,4 +33,5 @@ public interface TaskService {
       */
     public Task pull(int type, int priority);
 
+
 }
