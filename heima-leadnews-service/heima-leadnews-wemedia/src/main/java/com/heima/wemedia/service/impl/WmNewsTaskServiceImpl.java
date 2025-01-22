@@ -69,7 +69,8 @@ public class WmNewsTaskServiceImpl implements WmNewsTaskService {
       * @Description: 消费任务，审核文章
       */
 
-    @Scheduled(fixedRate = 1000)
+    //也就是说，这个任务会在你发布文章的时候，自动帮助进行审核文章
+    @Scheduled(fixedRate = 1000) //每隔1秒执行一次
     @Override
     @SneakyThrows
     public void scanNewsByTask() {
