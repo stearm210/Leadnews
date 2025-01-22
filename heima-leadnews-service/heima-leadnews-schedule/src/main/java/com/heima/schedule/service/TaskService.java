@@ -32,4 +32,5 @@ public interface TaskService {
       * @Description: 按照类型和优先级拉取任务
       */
     public Task pull(int type, int priority);
+
 }

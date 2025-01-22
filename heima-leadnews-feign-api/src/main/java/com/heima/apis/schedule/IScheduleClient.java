@@ -41,5 +41,5 @@ public interface IScheduleClient {
      * @Description: 按照类型和优先级拉取任务
      */
     @GetMapping("/api/v1/task/poll/{type}/{priority}")
-    public ResponseResult poll(@PathVariable("type") int type,@PathVariable("priority")  int priority);
+    public ResponseResult pull(@PathVariable("type") int type,@PathVariable("priority")  int priority);
 }
