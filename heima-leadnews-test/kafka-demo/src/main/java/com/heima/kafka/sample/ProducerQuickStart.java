@@ -24,6 +24,11 @@ public class ProducerQuickStart {
         //消息确认机制ack的配置,全部副本确认才返回成功
         properties.put(ProducerConfig.ACKS_CONFIG,"all");
 
+        //消息重置操作
+        properties.put(ProducerConfig.RETRIES_CONFIG,10);
+        //消息压缩配置
+        properties.put(ProducerConfig.COMPRESSION_TYPE_CONFIG,"gzip");
+
         //2.生产者对象
         KafkaProducer<String,String> producer = new KafkaProducer<String, String>(properties);
 
