@@ -37,6 +37,8 @@ public class ConsumerQuickStart {
             for (ConsumerRecord<String, String> consumerRecord : consumerRecords) {
                 System.out.println(consumerRecord.key());
                 System.out.println(consumerRecord.value());
+                //对应的偏移量
+                System.out.println(consumerRecord.offset());
                 //消息存储在哪一个分区下
                 System.out.println(consumerRecord.partition());
             }
