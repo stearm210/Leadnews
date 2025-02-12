@@ -41,7 +41,5 @@ public class ConsumerQuickStart {
                 System.out.println(consumerRecord.partition());
             }
         }
-
     }
-
 }
