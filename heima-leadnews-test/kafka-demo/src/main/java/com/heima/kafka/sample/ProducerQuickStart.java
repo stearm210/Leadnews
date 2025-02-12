@@ -34,7 +34,7 @@ public class ProducerQuickStart {
 
         //3.发送消息
         //封装发送的消息
-        ProducerRecord<String,String> record = new ProducerRecord<String, String>("itheima-first","hello kafka");
+        ProducerRecord<String,String> record = new ProducerRecord<String, String>("itheima-topic","hello kafka");
         //同步发送消息
 //        RecordMetadata recordMetadata = producer.send(record).get();
 //        System.out.println(recordMetadata.offset());
