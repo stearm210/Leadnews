@@ -1,11 +1,11 @@
 package com.heima.kafka.sample;
 
-import org.apache.kafka.clients.consumer.ConsumerConfig;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
-import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.kafka.clients.consumer.*;
+import org.apache.kafka.common.TopicPartition;
+
 import java.time.Duration;
 import java.util.Collections;
+import java.util.Map;
 import java.util.Properties;
 
 /**
@@ -24,6 +24,12 @@ public class ConsumerQuickStart {
         properties.put(ConsumerConfig.KEY_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, "org.apache.kafka.common.serialization.StringDeserializer");
 
+        //设置消费者组
+        properties.put(ConsumerConfig.GROUP_ID_CONFIG,"group2");
+
+        //手动提交偏移量
+        properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG,false);
+
         //2.消费者对象
         KafkaConsumer<String, String> consumer = new KafkaConsumer<String, String>(properties);
 
@@ -41,7 +47,25 @@ public class ConsumerQuickStart {
                 System.out.println(consumerRecord.offset());
                 //消息存储在哪一个分区下
                 System.out.println(consumerRecord.partition());
+
+                //同步提交偏移量
+//                try {
+//                    consumer.commitSync();//同步提交当前最新的偏移量
+//                }catch (CommitFailedException e){
+//                    System.out.println("记录提交失败的异常："+e);
+//                }
+
             }
+            //异步方式提交偏移量
+            consumer.commitAsync(new OffsetCommitCallback() {
+                @Override
+                public void onComplete(Map<TopicPartition, OffsetAndMetadata> map, Exception e) {
+                    //失败则显示信息
+                    if(e!=null){
+                        System.out.println("记录错误的提交偏移量："+ map+",异常信息"+e);
+                    }
+                }
+            });
         }
     }
 }
