@@ -170,7 +170,8 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
-     /*
+
+    /*
       * @Title: saveRelativeInfoForCover
       * @Author: pyzxW
       * @Date: 2025-01-13 15:39:45
@@ -308,6 +309,39 @@ public class WmNewsServiceImpl  extends ServiceImpl<WmNewsMapper, WmNews> implem
             wmNewsMaterialMapper.delete(Wrappers.<WmNewsMaterial>lambdaQuery().eq(WmNewsMaterial::getNewsId,wmNews.getId()));
             updateById(wmNews);
         }
+    }
+
+     /*
+      * @Title: downOrUp
+      * @Author: pyzxW
+      * @Date: 2025-02-14 19:05:08
+      * @Params:
+      * @Return: null
+      * @Description: 文章的上下架操作
+      */
+    @Override
+    public ResponseResult downOrUp(WmNewsDto dto) {
+        //1.检查参数
+        if (dto == null || dto.getId() == null){
+            //失效文章
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+        //2.查询文章
+        WmNews wmNews = getById(dto.getId());
+        if (wmNews == null){
+            //文章不存在
+            return ResponseResult.errorResult(AppHttpCodeEnum.DATA_NOT_EXIST,"文章不存在");
+        }
+
+        //3.判断文章是否发布
+        if (!wmNews.getStatus().equals(WmNews.Status.PUBLISHED.getCode())){
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID,"文章不是发布状态，不能上下架");
+        }
+        //4.修改文章enable
+        if (dto.getEnable() != null || dto.getEnable() > -1 && dto.getEnable() < 2){
+            update(Wrappers.<WmNews>lambdaUpdate().set(WmNews::getEnable,dto.getEnable()).eq(WmNews::getId,dto.getId()));
+        }
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
 }

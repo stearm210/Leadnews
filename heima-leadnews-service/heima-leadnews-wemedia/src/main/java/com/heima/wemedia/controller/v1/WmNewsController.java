@@ -40,4 +40,17 @@ public class WmNewsController {
     public ResponseResult submitNews(@RequestBody WmNewsDto dto){
         return wmNewsService.submitNews(dto);
     }
+
+     /*
+      * @Title: downOrUp
+      * @Author: pyzxW
+      * @Date: 2025-02-14 19:02:19
+      * @Params:  
+      * @Return: null
+      * @Description: 文章的上架与下架方法
+      */
+    @PostMapping("/down_or_up")
+    public ResponseResult downOrUp(@RequestBody WmNewsDto dto){
+        return wmNewsService.downOrUp(dto);
+    }
 }
