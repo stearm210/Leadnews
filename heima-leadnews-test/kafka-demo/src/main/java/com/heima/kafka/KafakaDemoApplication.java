@@ -1,6 +1,7 @@
 package com.heima.kafka;
 
 import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 /**
  * @BelongsProject: heima-leadnews
@@ -10,6 +11,7 @@ import org.springframework.boot.SpringApplication;
  * @Description: TODO
  * @Version: 1.0
  */
+@SpringBootApplication
 public class KafakaDemoApplication {
     public static void main(String[] args) {
         SpringApplication.run(KafakaDemoApplication.class,args);
