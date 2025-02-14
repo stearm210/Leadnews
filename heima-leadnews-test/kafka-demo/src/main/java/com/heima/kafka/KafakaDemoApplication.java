@@ -1,5 +1,7 @@
 package com.heima.kafka;
 
+import org.springframework.boot.SpringApplication;
+
 /**
  * @BelongsProject: heima-leadnews
  * @BelongsPackage: com.heima.kafka.sample.sample
@@ -9,4 +11,7 @@ package com.heima.kafka;
  * @Version: 1.0
  */
 public class KafakaDemoApplication {
+    public static void main(String[] args) {
+        SpringApplication.run(KafakaDemoApplication.class,args);
+    }
 }
