@@ -1,11 +1,9 @@
-package com.heima.kafka.sample;
+package com.heima.kafka.sample.sample;
 
 import org.apache.kafka.clients.consumer.*;
-import org.apache.kafka.common.TopicPartition;
 
 import java.time.Duration;
 import java.util.Collections;
-import java.util.Map;
 import java.util.Properties;
 
 /**
