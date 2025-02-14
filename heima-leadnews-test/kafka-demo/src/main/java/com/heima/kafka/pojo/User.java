@@ -12,6 +12,14 @@ public class User {
     private String username;
     private Integer age;
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "username='" + username + '\'' +
+                ", age=" + age +
+                '}';
+    }
+
     public String getUsername() {
         return username;
     }
