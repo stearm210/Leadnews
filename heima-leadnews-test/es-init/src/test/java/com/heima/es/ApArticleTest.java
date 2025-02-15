@@ -37,6 +37,7 @@ public class ApArticleTest {
         List<SearchArticleVo> searchArticleVos = apArticleMapper.loadArticleList();
         //2.批量导入到es索引库
         BulkRequest bulkRequest = new BulkRequest("app_info_article");
+        //进行批量的导入工作
         for (SearchArticleVo searchArticleVo : searchArticleVos) {
             IndexRequest indexRequest = new IndexRequest().id(searchArticleVo.getId().toString())
                     .source(JSON.toJSONString(searchArticleVo), XContentType.JSON);
