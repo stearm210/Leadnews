@@ -11,6 +11,9 @@
     <modules>
         <module>freemarker-demo</module>
         <module>minio-demo</module>
+        <module>es-init</module>
+        <module>kafka-demo</module>
+        <module>tess4j-demo</module>
     </modules>
     <modelVersion>4.0.0</modelVersion>
 
