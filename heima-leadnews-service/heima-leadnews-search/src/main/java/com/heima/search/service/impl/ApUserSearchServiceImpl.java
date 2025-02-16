@@ -43,7 +43,7 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
         //根据userid以及keyword进行查询
         Query query = Query.query(Criteria.where("userId").is(userId).and("keyword").is(keyword));
         ApUserSearch apUserSearch = mongoTemplate.findOne(query, ApUserSearch.class);
-        //2.存在 更新创建时间
+        //2.存在关键字(之前查找过这个关键字) 更新创建时间
         if(apUserSearch != null){
             //更新创建时间
             apUserSearch.setCreatedTime(new Date());
