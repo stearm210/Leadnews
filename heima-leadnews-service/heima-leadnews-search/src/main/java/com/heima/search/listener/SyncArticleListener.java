@@ -44,17 +44,20 @@ public class SyncArticleListener {
       * @Params: [msg]
       * @Return: void
       * @Description: 定义监听接收消息,保存索引数据
+      * 该函数监听消息队列中的文章数据变更事件，将消息解析后实时同步到Elasticsearch，用于实现搜索服务的数据准实时更新，支撑文章搜索功能。
       */
     public void onMessage(String message) {
+        //首先检查传入的消息是否非空，避免处理无效数据。
         if (StringUtils.isNoneBlank(message)){
             //打印对应的信息
             log.info("SyncArticleListener,message={}",message);
-            //转换成对应的对象
+            //将JSON格式的字符串消息反序列化为SearchArticleVo对象，提取结构化数据。
             SearchArticleVo searchArticleVo = JSON.parseObject(message, SearchArticleVo.class);
             //创建索引库对象，并且指定索引库的名称
             IndexRequest indexRequest = new IndexRequest("app_info_article");
-            //获得文章的id
+            //使用文章ID作为Elasticsearch文档的唯一标识。
             indexRequest.id(searchArticleVo.getId().toString());
+            //直接将原始JSON消息作为文档内容，保留原始数据格式。
             indexRequest.source(message, XContentType.JSON);
             try {
                 restHighLevelClient.index(indexRequest, RequestOptions.DEFAULT);
