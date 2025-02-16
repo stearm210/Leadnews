@@ -107,6 +107,7 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
         //拷贝对应的静态地址
         vo.setStaticUrl(path);
         //传递对应的消息至kafka
+        //注意对需要发送的消息进行JSON转换
         kafkaTemplate.send(ArticleConstants.ARTICLE_ES_SYNC_TOPIC, JSON.toJSONString(vo));
     }
 }
