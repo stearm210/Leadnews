@@ -36,6 +36,7 @@ import java.io.IOException;
 public class SyncArticleListener {
     @Autowired
     private RestHighLevelClient restHighLevelClient;
+    //定义kafka的一个监听效果
     @KafkaListener(topics = ArticleConstants.ARTICLE_ES_SYNC_TOPIC)
      /*
       * @Title: onMessage
