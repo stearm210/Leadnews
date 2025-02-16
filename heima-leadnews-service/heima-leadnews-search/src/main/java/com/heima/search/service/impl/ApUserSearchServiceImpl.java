@@ -8,6 +8,7 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -36,6 +37,7 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
       * @Description: Convert to Basic Latin
       */
     @Override
+    @Async
     public void insert(String keyword, Integer userId) {
         //1.查询当前用户的搜索关键词
         //根据userid以及keyword进行查询
