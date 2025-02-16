@@ -66,7 +66,7 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
         }else {
             //替换操作，时间最久的将会被替换
             ApUserSearch lastUserSearch = apUserSearchList.get(apUserSearchList.size() - 1);
-            //替换操作
+            //替换操作，将会替换时间最久的那个
             mongoTemplate.findAndReplace(Query.query(Criteria.where("id").is(lastUserSearch.getId())),apUserSearch);
         }
     }
