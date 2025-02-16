@@ -31,6 +31,8 @@ import java.io.IOException;
   * @Return: null
   * @Description: 定义监听接收消息,保存索引数据
   */
+
+//新增文章创建对应的索引信息查询操作
 @Component
 @Slf4j
 public class SyncArticleListener {
