@@ -84,6 +84,7 @@ public class ArticleFreemarkerServiceImpl implements ArticleFreemarkerService {
                     .set(ApArticle::getStaticUrl,path));
 
             //发送消息，创建索引
+            //这里会获得文章内容、对应的url、id等信息并发送至kafka，实现文章数据同步至Elasticsearch
             createArticleESIndex(apArticle,content,path);
         }
     }
