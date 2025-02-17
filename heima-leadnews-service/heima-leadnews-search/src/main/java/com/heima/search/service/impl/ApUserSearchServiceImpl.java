@@ -1,7 +1,11 @@
 package com.heima.search.service.impl;
 
+import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.user.pojos.ApUser;
 import com.heima.search.pojos.ApUserSearch;
 import com.heima.search.service.ApUserSearchService;
+import com.heima.utils.thread.AppThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
@@ -70,5 +74,25 @@ public class ApUserSearchServiceImpl implements ApUserSearchService {
             //替换操作，将会替换时间最久的那个
             mongoTemplate.findAndReplace(Query.query(Criteria.where("id").is(lastUserSearch.getId())),apUserSearch);
         }
+    }
+
+    /**
+     * 查询搜索历史
+     *
+     * @return
+     */
+    @Override
+    public ResponseResult findUserSearch() {
+        //1.获取当前用户
+        ApUser user = AppThreadLocalUtil.getUser();
+        //没有用户信息时则加载失败
+        if(user == null){
+            //返回需要进行登录
+            return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
+        }
+        //2.根据用户查询数据，并且按照时间进行倒序
+        List<ApUserSearch> apUserSearches = mongoTemplate.find(Query.query(Criteria.where("userId").is(user.getId())).with(Sort.by(Sort.Direction.DESC, "createdTime")), ApUserSearch.class);
+        //返回对应的信息
+        return ResponseResult.okResult(apUserSearches);
     }
 }

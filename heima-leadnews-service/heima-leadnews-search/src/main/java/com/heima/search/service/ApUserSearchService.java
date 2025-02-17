@@ -1,6 +1,8 @@
 package com.heima.search.service;
 
 
+import com.heima.model.common.dtos.ResponseResult;
+
 public interface ApUserSearchService {
      /*
       * @Title: insert
@@ -11,4 +13,10 @@ public interface ApUserSearchService {
       * @Description: 保存用户搜索的历史记录
       */
     public void insert(String keyword, Integer userId);
+
+    /**
+     查询搜索历史
+     @return
+     */
+    public ResponseResult findUserSearch();
 }
