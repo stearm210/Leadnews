@@ -46,6 +46,6 @@ public class ApUserSearchController {
       */
     @PostMapping("/del")
     public ResponseResult delUserSearch(@RequestBody HistorySearchDto historySearchDto) {
-        return null;
+        return apUserSearchService.delUserSearch(historySearchDto);
     }
 }
