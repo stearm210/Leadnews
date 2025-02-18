@@ -5,6 +5,14 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+ /*
+  * @Title:
+  * @Author: pyzxW
+  * @Date: 2025-02-18 15:31:43
+  * @Params:
+  * @Return: null
+  * @Description: 用于注册模块和修改器
+  */
 public class ConfusionModule extends Module {
 
     public final static String MODULE_NAME = "jackson-confusion-encryption";

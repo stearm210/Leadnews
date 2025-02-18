@@ -10,6 +10,14 @@ import com.heima.model.common.annotation.IdEncrypt;
 
 import java.util.Iterator;
 
+ /*
+  * @Title:
+  * @Author: pyzxW
+  * @Date: 2025-02-18 15:31:29
+  * @Params:
+  * @Return: null
+  * @Description: 用于过滤反序列化时处理的字段
+  */
 public class ConfusionDeserializerModifier extends BeanDeserializerModifier {
 
     @Override

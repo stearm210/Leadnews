@@ -6,6 +6,14 @@ import com.fasterxml.jackson.databind.SerializerProvider;
 
 import java.io.IOException;
 
+ /*
+  * @Title:
+  * @Author: pyzxW
+  * @Date: 2025-02-18 15:04:52
+  * @Params:  
+  * @Return: null
+  * @Description: 用于序列化自增数字的混淆
+  */
 public class ConfusionSerializer extends JsonSerializer<Object> {
 
     @Override
