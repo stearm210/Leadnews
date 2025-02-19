@@ -48,11 +48,11 @@ public class ApUserRelationServiceImpl implements ApUserRelationService
             //回复信息：需要登录操作
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
-        //获得文章作者id
+        //这里查找的是当前登录的用户的id
         Integer apUserId = user.getId();
 
         //3.关注操作与取消关注操作
-        //这里很奇怪，为什么要查找文章作者id
+        //查找文章作者id,作为一个值进行对应
         Integer followUserId = dto.getAuthorId();
         //加入redis内存中，方便快速读取
         //加入的参数为：key、value、score
