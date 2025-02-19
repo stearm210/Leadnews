@@ -1,0 +1,4 @@
+文件是Spring Boot 应用程序用于配置应用程序启动时
+的各种初始化设置的配置文件，它可以与 application.yml
+或 application.properties 一起使用，
+用于定义一些启动过程中需要加载的配置项。
