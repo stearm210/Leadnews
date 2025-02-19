@@ -24,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
   * @Description: 新增对应的拦截器操作
   */
 public class AppTokenInterceptor implements HandlerInterceptor {
+    //获取与存入线程的方法
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String userId = request.getHeader("userId");
@@ -36,6 +37,7 @@ public class AppTokenInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    //清洗线程的方法
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         AppThreadLocalUtil.clear();
