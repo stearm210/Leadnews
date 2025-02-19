@@ -8,6 +8,7 @@ import com.heima.model.user.dtos.UserRelationDto;
 import com.heima.model.user.pojos.ApUser;
 import com.heima.user.service.ApUserRelationService;
 import com.heima.utils.thread.AppThreadLocalUtil;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -21,11 +22,9 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApUserRelationServiceImpl implements ApUserRelationService
 {
-    private final CacheService cacheService;
-
-    public ApUserRelationServiceImpl(CacheService cacheService) {
-        this.cacheService = cacheService;
-    }
+    //redis操作，获取redis操作对象
+    @Autowired
+    private CacheService cacheService;
 
     /*
       * @Title: follow
@@ -54,6 +53,8 @@ public class ApUserRelationServiceImpl implements ApUserRelationService
 
         //3.关注操作与取消关注操作
         Integer followUserId = dto.getAuthorId();
+        //加入redis内存中，方便快速读取
+        //加入的参数为：key、value、score
         if(dto.getOperation() == 0) {
             // 将对方写入我的关注中
             cacheService.zAdd(BehaviorConstants.APUSER_FOLLOW_RELATION + apUserId, followUserId.toString(), System.currentTimeMillis());
