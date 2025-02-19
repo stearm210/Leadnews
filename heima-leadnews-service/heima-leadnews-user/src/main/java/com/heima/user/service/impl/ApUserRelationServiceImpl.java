@@ -1,5 +1,7 @@
 package com.heima.user.service.impl;
 
+import com.heima.common.constants.BehaviorConstants;
+import com.heima.common.redis.CacheService;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.user.dtos.UserRelationDto;
@@ -19,7 +21,13 @@ import org.springframework.stereotype.Service;
 @Service
 public class ApUserRelationServiceImpl implements ApUserRelationService
 {
-     /*
+    private final CacheService cacheService;
+
+    public ApUserRelationServiceImpl(CacheService cacheService) {
+        this.cacheService = cacheService;
+    }
+
+    /*
       * @Title: follow
       * @Author: pyzxW
       * @Date: 2025-02-18 16:02:54
@@ -41,13 +49,24 @@ public class ApUserRelationServiceImpl implements ApUserRelationService
             //回复信息：需要登录操作
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
-        //获得对应的用户id信息
+        //获得文章作者id
         Integer apUserId = user.getId();
 
         //3.关注操作与取消关注操作
+        Integer followUserId = dto.getAuthorId();
+        if(dto.getOperation() == 0) {
+            // 将对方写入我的关注中
+            cacheService.zAdd(BehaviorConstants.APUSER_FOLLOW_RELATION + apUserId, followUserId.toString(), System.currentTimeMillis());
+            // 将我写入对方的粉丝中
+            cacheService.zAdd(BehaviorConstants.APUSER_FANS_RELATION + followUserId, apUserId.toString(), System.currentTimeMillis());
+        } else {
+            // 取消关注
+            cacheService.zRemove(BehaviorConstants.APUSER_FOLLOW_RELATION + apUserId, followUserId.toString());
+            cacheService.zRemove(BehaviorConstants.APUSER_FANS_RELATION + followUserId, apUserId.toString());
+        }
 
         //4.返回操作
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
 
-        return null;
     }
 }
