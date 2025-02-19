@@ -68,6 +68,5 @@ public class ApUserRelationServiceImpl implements ApUserRelationService
 
         //4.返回操作
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
-
     }
 }
