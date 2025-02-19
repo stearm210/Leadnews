@@ -3,6 +3,9 @@ package com.heima.behavior.service.Impl;
 import com.heima.behavior.service.ApLikesBehaviorService;
 import com.heima.model.behavior.dtos.LikesBehaviorDto;
 import com.heima.model.common.dtos.ResponseResult;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * @BelongsProject: heima-leadnews
@@ -12,6 +15,9 @@ import com.heima.model.common.dtos.ResponseResult;
  * @Description: TODO
  * @Version: 1.0
  */
+@Service
+@Transactional
+@Slf4j
 public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
     /**
      * 点赞
