@@ -52,6 +52,7 @@ public class ApUserRelationServiceImpl implements ApUserRelationService
         Integer apUserId = user.getId();
 
         //3.关注操作与取消关注操作
+        //这里很奇怪，为什么要查找文章作者id
         Integer followUserId = dto.getAuthorId();
         //加入redis内存中，方便快速读取
         //加入的参数为：key、value、score
