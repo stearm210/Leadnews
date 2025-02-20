@@ -207,6 +207,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             boolean flag = true;
 
             //如果缓存中存在该文章，只更新分值
+            //需要经过循环比对是否存在对应的文章
             for (HotArticleVo hotArticleVo : hotArticleVoList) {
                 if (hotArticleVo.getId().equals(apArticle.getId())) {
                     hotArticleVo.setScore(score);
