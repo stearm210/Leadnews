@@ -63,6 +63,7 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
         //3.点赞，保存对应数据
         if (dto.getOperation() == 0){
             //hGet是用于获取存储在哈希表中指定字段的值
+            //使用Object类型是因为它在Java中是所有类的超类，可以容纳任何类型的值。
             Object obj = cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), apUser.getId().toString());
             //操作不为空时，返回已点赞提示
             if(obj != null) {
