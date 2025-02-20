@@ -31,6 +31,8 @@ import org.springframework.transaction.annotation.Transactional;
 public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
     @Autowired
     private CacheService cacheService;
+
+    //kafka操作，用于方便发送kafka消息
     @Autowired
     private KafkaTemplate<String, String> kafkaTemplate;
     /**
