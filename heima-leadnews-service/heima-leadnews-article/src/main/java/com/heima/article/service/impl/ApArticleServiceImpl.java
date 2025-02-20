@@ -292,6 +292,15 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
       */
     @Override
     public ResponseResult loadArticleBehavior(ArticleInfoDto dto) {
+        // 1. 检查参数
+        if(dto == null || dto.getArticleId() == 0 || dto.getAuthorId() == 0 ) {
+            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+        }
+
+        //2.获取用户信息
+
+
+
         return null;
     }
 }
