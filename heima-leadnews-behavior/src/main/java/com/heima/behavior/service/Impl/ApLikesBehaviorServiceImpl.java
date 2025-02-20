@@ -1,10 +1,12 @@
 package com.heima.behavior.service.Impl;
 
 import com.heima.behavior.service.ApLikesBehaviorService;
+import com.heima.common.constants.BehaviorConstants;
 import com.heima.common.redis.CacheService;
 import com.heima.model.behavior.dtos.LikesBehaviorDto;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
+import com.heima.model.mess.UpdateArticleMess;
 import com.heima.model.user.pojos.ApUser;
 import com.heima.utils.thread.AppThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
@@ -47,13 +49,29 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
         if(apUser == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
+        //修改文章的信息对象
+        UpdateArticleMess mess = new UpdateArticleMess();
+        //设置文章id
+        mess.setArticleId(dto.getArticleId());
+        //设置文章的类型
+        mess.setType(UpdateArticleMess.UpdateArticleType.LIKES);
+
+        //3.点赞，保存对应数据
+        if (dto.getOperation() == 0){
+            Object obj = cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), apUser.getId().toString());
+            if(obj != null) {
+                return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "已点赞");
+            }
+        }
+
         return null;
     }
 
      /*
       * @Title: checkParam
       * @Author: pyzxW
-      * @Date: 2025-02-19 16:12:59
+      * @Date: 2025-02-19 16:12
+      * :59
       * @Params:
       * @Return: null
       * @Description: 检查参数操作
