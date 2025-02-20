@@ -33,6 +33,7 @@ public interface ApArticleService extends IService<ApArticle> {
     /**
      * 更新文章的分值，同时更新缓存中的热点文章数据
      * @param mess
+     *
      */
     public void updateScore(ArticleVisitStreamMess mess);
 }
