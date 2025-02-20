@@ -3,6 +3,7 @@ package com.heima.article.service;
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
+import com.heima.model.article.dtos.ArticleInfoDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.mess.ArticleVisitStreamMess;
@@ -36,4 +37,14 @@ public interface ApArticleService extends IService<ApArticle> {
      *
      */
     public void updateScore(ArticleVisitStreamMess mess);
+
+     /*
+      * @Title: loadArticleBehavior
+      * @Author: pyzxW
+      * @Date: 2025-02-20 16:03:35
+      * @Params:
+      * @Return: null
+      * @Description: 加载文章详情，进行数据的回显
+      */
+    public ResponseResult loadArticleBehavior(ArticleInfoDto dto);
 }

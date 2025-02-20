@@ -14,6 +14,7 @@ import com.heima.common.constants.ArticleConstants;
 import com.heima.common.redis.CacheService;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
+import com.heima.model.article.dtos.ArticleInfoDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.article.pojos.ApArticleConfig;
 import com.heima.model.article.pojos.ApArticleContent;
@@ -279,5 +280,18 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         updateById(apArticle);
 
         return apArticle;
+    }
+
+     /*
+      * @Title: loadArticleBehavior
+      * @Author: pyzxW
+      * @Date: 2025-02-20 16:04:31
+      * @Params:
+      * @Return: null
+      * @Description: 数字进行回显
+      */
+    @Override
+    public ResponseResult loadArticleBehavior(ArticleInfoDto dto) {
+        return null;
     }
 }
