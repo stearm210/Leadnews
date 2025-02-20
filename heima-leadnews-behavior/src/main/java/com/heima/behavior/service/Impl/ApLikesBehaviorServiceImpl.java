@@ -1,7 +1,9 @@
 package com.heima.behavior.service.Impl;
 
+import com.alibaba.fastjson.JSON;
 import com.heima.behavior.service.ApLikesBehaviorService;
 import com.heima.common.constants.BehaviorConstants;
+import com.heima.common.constants.HotArticleConstants;
 import com.heima.common.redis.CacheService;
 import com.heima.model.behavior.dtos.LikesBehaviorDto;
 import com.heima.model.common.dtos.ResponseResult;
@@ -58,13 +60,31 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
 
         //3.点赞，保存对应数据
         if (dto.getOperation() == 0){
+            //hGet是用于获取存储在哈希表中指定字段的值
             Object obj = cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), apUser.getId().toString());
+            //操作不为空时，返回已点赞提示
             if(obj != null) {
                 return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID, "已点赞");
             }
+            // 保存当前key
+            log.info("保存当前key：{}, {}, {}", dto.getArticleId(), apUser.getId(), dto);
+            //保存操作
+            cacheService.hPut(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), apUser.getId().toString(), JSON.toJSONString(dto));
+            mess.setAdd(1);
+        }else {
+            //取消点赞，删除当前的key
+            log.info("删除当前key:{}, {}", dto.getArticleId(), apUser.getId());
+            //删除当前的key
+            cacheService.hDelete(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), apUser.getId().toString());
+            mess.setAdd(-1);
         }
 
-        return null;
+        //4.对kafka发送对应的消息
+        //常量类消息为定位的路径
+        kafkaTemplate.send(HotArticleConstants.HOT_ARTICLE_SCORE_TOPIC,JSON.toJSONString(mess));
+
+        //5.结果返回
+        return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 
      /*
