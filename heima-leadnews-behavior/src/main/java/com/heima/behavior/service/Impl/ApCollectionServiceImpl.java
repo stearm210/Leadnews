@@ -62,7 +62,7 @@ public class ApCollectionServiceImpl implements ApCollectionService {
             log.info("文章收藏，保存key: {}, {}, {}", dto.getEntryId(), user.getId().toString(), JSON.toJSONString(dto));
             cacheService.hPut(BehaviorConstants.COLLECTION_BEHAVIOR + user.getId(), dto.getEntryId().toString(), JSON.toJSONString(dto));
         }else {
-// 取消收藏
+            // 取消收藏
             log.info("文章收藏，删除key: {}, {}, {}", dto.getEntryId().toString(), user.getId().toString(), JSON.toJSONString(dto));
             cacheService.hDelete(BehaviorConstants.COLLECTION_BEHAVIOR + user.getId(), dto.getEntryId().toString());
         }
