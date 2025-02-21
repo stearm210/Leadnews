@@ -17,6 +17,7 @@ public class UserClient implements IUserClient {
     @Override
     @GetMapping("/api/v1/user/findUserById/{userId}")
     public ApUser findUserById(@PathVariable("userId") int userId) {
+
         return null;
     }
 }
