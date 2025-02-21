@@ -288,7 +288,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
       * @Date: 2025-02-20 16:04:31
       * @Params:
       * @Return: null
-      * @Description: 数字进行回显
+      * @Description: 数据进行回显
       */
     @Override
     public ResponseResult loadArticleBehavior(ArticleInfoDto dto) {
