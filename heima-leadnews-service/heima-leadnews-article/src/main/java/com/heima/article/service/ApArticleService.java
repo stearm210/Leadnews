@@ -1,10 +1,12 @@
 package com.heima.article.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
+import com.heima.model.article.dtos.ArticleCommentDto;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
 import com.heima.model.article.dtos.ArticleInfoDto;
 import com.heima.model.article.pojos.ApArticle;
+import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.mess.ArticleVisitStreamMess;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -47,4 +49,11 @@ public interface ApArticleService extends IService<ApArticle> {
       * @Description: 加载文章详情，进行数据的回显
       */
     public ResponseResult loadArticleBehavior(ArticleInfoDto dto);
+
+    /**
+     * 查询文章的评论列表
+     * @param dto
+     * @return
+     */
+    public PageResponseResult findNewsComments(ArticleCommentDto dto);
 }

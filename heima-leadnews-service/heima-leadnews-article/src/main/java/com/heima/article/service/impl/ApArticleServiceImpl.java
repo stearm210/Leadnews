@@ -13,13 +13,16 @@ import com.heima.article.service.ArticleFreemarkerService;
 import com.heima.common.constants.ArticleConstants;
 import com.heima.common.constants.BehaviorConstants;
 import com.heima.common.redis.CacheService;
+import com.heima.model.article.dtos.ArticleCommentDto;
 import com.heima.model.article.dtos.ArticleDto;
 import com.heima.model.article.dtos.ArticleHomeDto;
 import com.heima.model.article.dtos.ArticleInfoDto;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.article.pojos.ApArticleConfig;
 import com.heima.model.article.pojos.ApArticleContent;
+import com.heima.model.article.vos.ArticleCommnetVo;
 import com.heima.model.article.vos.HotArticleVo;
+import com.heima.model.common.dtos.PageResponseResult;
 import com.heima.model.common.dtos.ResponseResult;
 import com.heima.model.common.enums.AppHttpCodeEnum;
 import com.heima.model.mess.ArticleVisitStreamMess;
@@ -341,5 +344,24 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         //4.返回最终的信息
         //返回的JSON都是用HashMap封装的
         return ResponseResult.okResult(resultMap);
+    }
+
+    /**
+     * 查询文章的评论统计
+     * @param dto
+     * @return
+     */
+    @Override
+    public PageResponseResult findNewsComments(ArticleCommentDto dto) {
+        // 1. 统计文章评论信息
+        Integer currentPage = dto.getPage();
+        dto.setPage((dto.getPage() - 1) * dto.getSize());
+        List<ArticleCommnetVo> list = apArticleMapper.findNewsComments(dto);
+        int count = apArticleMapper.findNewsCommentsCount(dto);
+
+        // 2. 构造结果返回
+        PageResponseResult responseResult = new PageResponseResult(currentPage, dto.getSize(), count);
+        responseResult.setData(list);
+        return responseResult;
     }
 }
