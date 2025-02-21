@@ -319,11 +319,10 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             }
 
             //是否收藏
-            String collctionJson = (String) cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + user.getId(), dto.getArticleId());
+            String collctionJson = (String) cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + user.getId(), String.valueOf(dto.getArticleId()));
             if(StringUtils.isNotBlank(collctionJson)){
                 isCollection = true;
             }
-
 
             // 3.4 是否关注
             Double score = cacheService.zScore(BehaviorConstants.APUSER_FOLLOW_RELATION + user.getId(), dto.getAuthorId());
