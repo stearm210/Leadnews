@@ -35,6 +35,14 @@ public class WemediaClient implements IWemediaClient {
     @Autowired
     private WmChannelService wmChannelService;
  
+     /*
+      * @Title: getChannels
+      * @Author: pyzxW
+      * @Date: 2025-02-22 20:40:19
+      * @Params:  
+      * @Return: null
+      * @Description: 查找文章对应的频道
+      */
     @GetMapping("/api/v1/channel/list")
     @Override
     public ResponseResult getChannels() {

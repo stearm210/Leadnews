@@ -18,6 +18,14 @@ public interface IWemediaClient {
     @PostMapping("/api/v1/wm_user/save")
     ResponseResult saveWmUser(@RequestBody WmUser wmUser);
  
+     /*
+      * @Title: getChannels
+      * @Author: pyzxW
+      * @Date: 2025-02-22 20:39:20
+      * @Params:  
+      * @Return: null
+      * @Description: 查询文章的所有频道
+      */
     @GetMapping("/api/v1/channel/list")
     public ResponseResult getChannels();
  

@@ -1,10 +1,15 @@
 package com.heima.article.service.impl;
 
+import com.alibaba.fastjson.JSON;
+import com.heima.apis.wemedia.IWemediaClient;
 import com.heima.article.mapper.ApArticleMapper;
 import com.heima.article.service.HotArticleService;
 import com.heima.common.constants.ArticleConstants;
+import com.heima.common.redis.CacheService;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.article.vos.HotArticleVo;
+import com.heima.model.common.dtos.ResponseResult;
+import com.heima.model.wemedia.pojos.WmChannel;
 import lombok.extern.slf4j.Slf4j;
 import org.joda.time.DateTime;
 import org.springframework.beans.BeanUtils;
@@ -13,8 +18,10 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @BelongsProject: heima-leadnews
@@ -44,11 +51,69 @@ public class HotArticleServiceImpl implements HotArticleService {
         List<HotArticleVo> hotArticleVoList = computeHotArticle(apArticleList);
 
         //3.为每个频道缓存30条分值较高的文章
+        cacheTagToRedis(hotArticleVoList);
+    }
 
 
+    @Autowired
+    private IWemediaClient wemediaClient;
+
+    @Autowired
+    private CacheService cacheService;
+     /*
+      * @Title: cacheTagToRedis
+      * @Author: pyzxW
+      * @Date: 2025-02-22 20:37:15
+      * @Params:
+      * @Return: null
+      * @Description: 为每个频道缓存30条分值较高的文章
+      */
+    private void cacheTagToRedis(List<HotArticleVo> hotArticleVoList) {
+        //为每个频道缓存30条分值较高的文章
+        ResponseResult responseResult = wemediaClient.getChannels();
+        //获得频道的操作是成功的
+        if (responseResult.getCode().equals(200)){
+            //先转为JSON格式
+            String channelJson = JSON.toJSONString(responseResult.getData());
+            //再从JSON格式转换为实体类方便进行操作
+            List<WmChannel> wmChannels = JSON.parseArray(channelJson, WmChannel.class);
+            //检索出每个频道的文章
+            if(wmChannels != null && wmChannels.size() > 0){
+                //对某一个频道进行循环
+                for (WmChannel wmChannel : wmChannels) {
+                    //list中装着某一个频道中的所有文章数据
+                    List<HotArticleVo> hotArticleVos = hotArticleVoList.stream().filter(x -> x.getChannelId().equals(wmChannel.getId())).collect(Collectors.toList());
+                    //给文章进行排序，取30条分值较高的文章存入redis  key：频道id   value：30条分值较高的文章
+                    sortAndCache(hotArticleVos, ArticleConstants.HOT_ARTICLE_FIRST_PAGE + wmChannel.getId());
+                }
+            }
+        }
+        //设置推荐的数据
+        //给文章进行排序，取30条分值较高的文章存入redis  key：频道id   value：30条分值较高的文章
+        sortAndCache(hotArticleVoList, ArticleConstants.HOT_ARTICLE_FIRST_PAGE+ArticleConstants.DEFAULT_TAG);
     }
 
      /*
+      * @Title: sortAndCache
+      * @Author: pyzxW
+      * @Date: 2025-02-22 20:51:20
+      * @Params:
+      * @Return: null
+      * @Description: 给文章进行排序,取30条分值较高的文章存入redis
+      */
+     private void sortAndCache(List<HotArticleVo> hotArticleVos, String key) {
+         //查到文章进行排序
+         hotArticleVos = hotArticleVos.stream().sorted(Comparator.comparing(HotArticleVo::getScore).reversed()).collect(Collectors.toList());
+         //如果大于30条，则只取30条
+         if (hotArticleVos.size() > 30) {
+             hotArticleVos = hotArticleVos.subList(0, 30);
+         }
+         //缓存到redis中
+         //key为频道id
+         cacheService.set(key, JSON.toJSONString(hotArticleVos));
+     }
+
+    /*
       * @Title: computeHotArticle
       * @Author: pyzxW
       * @Date: 2025-02-22 20:14:25
