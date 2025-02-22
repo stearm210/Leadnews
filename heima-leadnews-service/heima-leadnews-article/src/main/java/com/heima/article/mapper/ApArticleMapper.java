@@ -8,6 +8,7 @@ import com.heima.model.article.vos.ArticleCommnetVo;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 @Mapper
@@ -25,4 +26,14 @@ public interface ApArticleMapper extends BaseMapper<ApArticle> {
     List<ArticleCommnetVo> findNewsComments(@Param("dto") ArticleCommentDto dto);
 
     public int findNewsCommentsCount(@Param("dto")ArticleCommentDto dto);
+
+     /*
+      * @Title: findArticleListByLast5days
+      * @Author: pyzxW
+      * @Date: 2025-02-22 20:06:04
+      * @Params:
+      * @Return: null
+      * @Description: 查询前面5天的数据
+      */
+    public List<ApArticle> findArticleListByLast5days(@Param("dayParam") Date dayParam);
 }
