@@ -71,7 +71,7 @@ public class HotArticleServiceImpl implements HotArticleService {
     private void cacheTagToRedis(List<HotArticleVo> hotArticleVoList) {
         //为每个频道缓存30条分值较高的文章
         ResponseResult responseResult = wemediaClient.getChannels();
-        //获得频道的操作是成功的
+        //获得频道的操作是成功的//这是由于不同微服务之间进行调用，需要判断是否正常相应
         if (responseResult.getCode().equals(200)){
             //先转为JSON格式
             String channelJson = JSON.toJSONString(responseResult.getData());
