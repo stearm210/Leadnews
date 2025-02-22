@@ -44,6 +44,7 @@ public class HelloJob {
     public void shardingJobHandler(){
         //分片的参数
         int shardIndex = XxlJobHelper.getShardIndex();
+        //total是总分片数
         int shardTotal = XxlJobHelper.getShardTotal();
 
         //业务逻辑
