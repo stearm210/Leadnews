@@ -16,12 +16,15 @@ import org.springframework.context.annotation.Configuration;
 public class XxlJobConfig {
     private Logger logger = LoggerFactory.getLogger(XxlJobConfig.class);
 
+    //调度中心名字
     @Value("${xxl.job.admin.addresses}")
     private String adminAddresses;
 
+    //执行器名字
     @Value("${xxl.job.executor.appname}")
     private String appname;
 
+    //端口号
     @Value("${xxl.job.executor.port}")
     private int port;
 
