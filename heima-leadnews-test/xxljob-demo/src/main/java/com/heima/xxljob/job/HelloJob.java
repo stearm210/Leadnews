@@ -55,6 +55,14 @@ public class HelloJob {
         }
     }
 
+     /*
+      * @Title: getList
+      * @Author: pyzxW
+      * @Date: 2025-02-22 19:49:01
+      * @Params:
+      * @Return: null
+      * @Description: 对应的任务数进行循环操作
+      */
     public List<Integer> getList(){
         List<Integer> list = new ArrayList<>();
         for (int i = 0; i < 10000; i++) {
