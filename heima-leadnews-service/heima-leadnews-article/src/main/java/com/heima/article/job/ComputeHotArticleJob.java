@@ -26,6 +26,5 @@ public class ComputeHotArticleJob {
         log.info("热文章分值计算调度任务开始执行...");
         hotArticleService.computeHotArticle();
         log.info("热文章分值计算调度任务结束...");
-
     }
 }
