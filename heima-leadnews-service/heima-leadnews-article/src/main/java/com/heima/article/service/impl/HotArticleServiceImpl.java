@@ -119,7 +119,7 @@ public class HotArticleServiceImpl implements HotArticleService {
       * @Date: 2025-02-22 20:14:25
       * @Params:  
       * @Return: null
-      * @Description: 计算文章的分值操作
+      * @Description: 文章的分值操作
       */
     private List<HotArticleVo> computeHotArticle(List<ApArticle> apArticleList) {
         List<HotArticleVo> hotArticleVoList = new ArrayList<>();
