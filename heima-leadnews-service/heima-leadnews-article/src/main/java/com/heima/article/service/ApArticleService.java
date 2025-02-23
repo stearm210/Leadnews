@@ -23,6 +23,15 @@ public interface ApArticleService extends IService<ApArticle> {
 //    业务层用于接收持久层传回来的参数(文章的list)，并且转换为controller需要进行返回的参数，也就是ResponseResult
     public ResponseResult load(ArticleHomeDto dto, Short type);
 
+    /**
+     * 加载文章列表
+     * @param dto
+     * @param type  1 加载更多   2 加载最新
+     * @param firstPage  true  是首页  flase 非首页
+     * @return
+     */
+    public ResponseResult load2(ArticleHomeDto dto,Short type,boolean firstPage);
+
      /*
       * @Title: saveArticle
       * @Author: pyzxW
