@@ -39,12 +39,11 @@ public class KafkaStreamQuickStart {
         prop.put(StreamsConfig.APPLICATION_ID_CONFIG,"streams-quickstart");
         //stream的构建起
         StreamsBuilder streamsBuilder = new StreamsBuilder();
-
-        //1.创建kafka的stearm的对象
-        KafkaStreams kafkaStreams = new KafkaStreams(streamsBuilder.build(),prop);
-        //2.流式计算
+        //流式计算
         streamProcessor(streamsBuilder);
-        //.开启流式计算
+        //创建kafka的stearm的对象
+        KafkaStreams kafkaStreams = new KafkaStreams(streamsBuilder.build(),prop);
+        //开启流式计算
         kafkaStreams.start();
     }
 
