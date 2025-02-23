@@ -6,33 +6,26 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-/**
- * @BelongsProject: heima-leadnews
- * @BelongsPackage: com.heima.article.job
- * @Author: yanhongwei
- * @CreateTime: 2025-02-23  14:19
- * @Description: TODO
- * @Version: 1.0
- */
-
 @Component
 @Slf4j
 public class ComputeHotArticleJob {
+
     @Autowired
     private HotArticleService hotArticleService;
 
      /*
       * @Title: handle
       * @Author: pyzxW
-      * @Date: 2025-02-23 14:20:47
+      * @Date: 2025-02-23 14:28:56
       * @Params:
       * @Return: null
-      * @Description: 处理操作
+      * @Description: 热文章分值计算
       */
     @XxlJob("computeHotArticleJob")
     public void handle(){
-        log.info("开始执行计算热点文章任务开始执行");
+        log.info("热文章分值计算调度任务开始执行...");
         hotArticleService.computeHotArticle();
-        log.info("开始执行计算热点文章任务结束");
+        log.info("热文章分值计算调度任务结束...");
+
     }
 }
