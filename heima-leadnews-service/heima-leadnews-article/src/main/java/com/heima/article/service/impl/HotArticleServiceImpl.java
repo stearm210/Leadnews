@@ -81,8 +81,13 @@ public class HotArticleServiceImpl implements HotArticleService {
             if(wmChannels != null && wmChannels.size() > 0){
                 //对某一个频道进行循环
                 for (WmChannel wmChannel : wmChannels) {
+                    if (wmChannel.getId() == null) {
+                        continue;
+                    }
                     //list中装着某一个频道中的所有文章数据
-                    List<HotArticleVo> hotArticleVos = hotArticleVoList.stream().filter(x -> x.getChannelId().equals(wmChannel.getId())).collect(Collectors.toList());
+                    List<HotArticleVo> hotArticleVos = hotArticleVoList.stream()
+                            .filter(x -> wmChannel.getId().equals(x.getChannelId()))
+                            .collect(Collectors.toList());
                     //给文章进行排序，取30条分值较高的文章存入redis  key：频道id   value：30条分值较高的文章
                     sortAndCache(hotArticleVos, ArticleConstants.HOT_ARTICLE_FIRST_PAGE + wmChannel.getId());
                 }
