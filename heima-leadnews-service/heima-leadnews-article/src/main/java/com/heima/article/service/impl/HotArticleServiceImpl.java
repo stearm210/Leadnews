@@ -45,6 +45,7 @@ public class HotArticleServiceImpl implements HotArticleService {
     public void computeHotArticle() {
         //1.查询前5天的文章数据
         Date dateParam = DateTime.now().minusDays(5).toDate();
+        //Date dateParam = DateTime.now().minusYears(10).toDate();
         List<ApArticle> apArticleList = apArticleMapper.findArticleListByLast5days(dateParam);
 
         //2.计算文章的分值
