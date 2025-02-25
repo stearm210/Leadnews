@@ -73,6 +73,7 @@ public class ApLikesBehaviorServiceImpl implements ApLikesBehaviorService {
             log.info("保存当前key：{}, {}, {}", dto.getArticleId(), apUser.getId(), dto);
             //保存操作
             cacheService.hPut(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), apUser.getId().toString(), JSON.toJSONString(dto));
+            //点赞操作，加上一个正一
             mess.setAdd(1);
         }else {
             //取消点赞，删除当前的key
