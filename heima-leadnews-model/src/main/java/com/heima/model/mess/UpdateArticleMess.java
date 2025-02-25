@@ -22,7 +22,7 @@ public class UpdateArticleMess {
      */
     private Long articleId;
     /**
-     * 修改数据的增量，可为正负
+     * 修改数据的增量，可为正负，代表被修改的次数
      */
     private Integer add;
 
