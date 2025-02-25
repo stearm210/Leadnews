@@ -1,7 +1,15 @@
 package com.heima.model.mess;
  
 import lombok.Data;
- 
+
+ /*
+  * @Title:
+  * @Author: pyzxW
+  * @Date: 2025-02-25 16:05:28
+  * @Params:
+  * @Return: null
+  * @Description: 主用于kafka文章流式计算操作
+  */
 @Data
 public class UpdateArticleMess {
  
