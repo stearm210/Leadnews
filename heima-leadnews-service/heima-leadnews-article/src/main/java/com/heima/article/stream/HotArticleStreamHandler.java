@@ -47,7 +47,6 @@ public class HotArticleStreamHandler {
                     public String apply() {
                         return "COLLECTION:0,COMMENT:0,LIKES:0,VIEWS:0";
                     }
-                    // 真正的聚合操作，返回值是消息的value
                 }, new Aggregator<String, String, String>() {
                     /**
                      * @param key
