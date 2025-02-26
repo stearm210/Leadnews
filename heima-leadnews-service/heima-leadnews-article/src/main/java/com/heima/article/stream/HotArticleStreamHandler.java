@@ -56,6 +56,7 @@ public class HotArticleStreamHandler {
                      * @param aggValue
                      * @return
                      */
+                    //下面这个apply是真正的聚合操作
                     @Override
                     public String apply(String key, String value, String aggValue) {
                         System.out.println(value);
@@ -110,7 +111,7 @@ public class HotArticleStreamHandler {
                 .map((key, value) -> {
                     return new KeyValue<>(key.key().toString(), formatObj(key.key().toString(), value));
                 })
-                // 发送消息
+                // 发送消息,已经指定了topic
                 .to(HotArticleConstants.HOT_ARTICLE_INCR_HANDLE_TOPIC);
  
         return stream;
