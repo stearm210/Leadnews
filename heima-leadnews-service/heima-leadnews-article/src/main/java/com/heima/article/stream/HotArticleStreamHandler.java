@@ -30,6 +30,7 @@ public class HotArticleStreamHandler {
         stream.map((key, value) -> {
             UpdateArticleMess mess = JSON.parseObject(value, UpdateArticleMess.class);
             // 重置消息的key:1234343434 和 value:like:1
+            //key为文章的id   value为对应文章的操作
             return new KeyValue<>(mess.getArticleId().toString(), mess.getType().name() + ":" + mess.getAdd());
         })
                 // 按照文章id进行聚合
