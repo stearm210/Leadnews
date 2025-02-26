@@ -71,6 +71,7 @@ public class HotArticleStreamHandler {
                             String[] split = agg.split(":");
                             // 获得初始值，也是时间窗口内计算之后的值
                             // 根据新的消息值对相应的计数进行累加，确保计数器保存最新状态
+                            //获得赋值为0的状态
                             switch (UpdateArticleMess.UpdateArticleType.valueOf(split[0])) {
                                 case COLLECTION:
                                     col = Integer.parseInt(split[1]);
@@ -86,7 +87,7 @@ public class HotArticleStreamHandler {
                                     break;
                             }
                         }
-                        // 累加操作 likes:1
+                        // 累加操作 例子：likes:1
                         String[] valAry = value.split(":");
                         switch (UpdateArticleMess.UpdateArticleType.valueOf(valAry[0])) {
                             case COLLECTION:
