@@ -67,6 +67,7 @@ public class HotArticleStreamHandler {
                         int col = 0, com = 0, like = 0, vie = 0;
                         //对aggAry进行遍历
                         for (String agg : aggAry) {
+                            //这里又对:进行分片
                             String[] split = agg.split(":");
                             // 获得初始值，也是时间窗口内计算之后的值
                             // 根据新的消息值对相应的计数进行累加，确保计数器保存最新状态
