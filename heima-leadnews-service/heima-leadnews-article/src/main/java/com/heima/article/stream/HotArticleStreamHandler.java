@@ -61,8 +61,11 @@ public class HotArticleStreamHandler {
                         if(StringUtils.isBlank(value)) {
                             return aggValue;
                         }
+                        //下面的这个aggAry相当于是对"COLLECTION:0,COMMENT:0,LIKES:0,VIEWS:0"做了一个按照逗号的分片操作
                         String[] aggAry = aggValue.split(",");
+                        //下面col这些变量是对应的各个文章操作（点赞等）的计数器，初始值都是0
                         int col = 0, com = 0, like = 0, vie = 0;
+                        //对aggAry进行遍历
                         for (String agg : aggAry) {
                             String[] split = agg.split(":");
                             // 获得初始值，也是时间窗口内计算之后的值
