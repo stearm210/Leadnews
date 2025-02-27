@@ -358,58 +358,52 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
       * @Return: null
       * @Description: 数据进行回显
       */
-    @Override
-    public ResponseResult loadArticleBehavior(ArticleInfoDto dto) {
-        // 1. 检查参数
-        if(dto == null || dto.getArticleId() == 0 || dto.getAuthorId() == 0 ) {
-            return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
-        }
+     @Override
+     public ResponseResult loadArticleBehavior(ArticleInfoDto dto) {
 
-        //{ "isfollow": true, "islike": true,"isunlike": false,"iscollection": true }
-        boolean isFollow = false, isLike = false, isUnlike = false, isCollection = false;
+         //0.检查参数
+         if (dto == null || dto.getArticleId() == null || dto.getAuthorId() == null) {
+             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
+         }
 
-        //2.获取用户信息
-        ApUser user = AppThreadLocalUtil.getUser();
+         //{ "isfollow": true, "islike": true,"isunlike": false,"iscollection": true }
+         boolean isfollow = false, islike = false, isunlike = false, iscollection = false;
 
-        //3.查询用户的行为
-        if (user != null){
-            //喜欢的行为
-            String likeBehaviorJson = (String) cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId(), user.getId().toString());
-            if(StringUtils.isNotBlank(likeBehaviorJson)){
-                //likeBehaviorJson 非空，则认为用户对这篇文章点过赞
-                isLike = true;
-            }
+         ApUser user = AppThreadLocalUtil.getUser();
+         if(user != null){
+             //喜欢行为
+             String likeBehaviorJson = (String) cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString());
+             if(StringUtils.isNotBlank(likeBehaviorJson)){
+                 islike = true;
+             }
+             //不喜欢的行为
+             String unLikeBehaviorJson = (String) cacheService.hGet(BehaviorConstants.UN_LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString());
+             if(StringUtils.isNotBlank(unLikeBehaviorJson)){
+                 isunlike = true;
+             }
+             //是否收藏
+             String collctionJson = (String) cacheService.hGet(BehaviorConstants.COLLECTION_BEHAVIOR+user.getId(),dto.getArticleId().toString());
+             if(StringUtils.isNotBlank(collctionJson)){
+                 iscollection = true;
+             }
 
-            //不喜欢的行为
-            String unLikeBehaviorJson = (String) cacheService.hGet(BehaviorConstants.UN_LIKE_BEHAVIOR + dto.getArticleId(), user.getId().toString());
-            if(StringUtils.isNotBlank(unLikeBehaviorJson)){
-                isUnlike = true;
-            }
+             //是否关注
+             Double score = cacheService.zScore(BehaviorConstants.APUSER_FOLLOW_RELATION + user.getId(), dto.getAuthorId().toString());
+             System.out.println(score);
+             if(score != null){
+                 isfollow = true;
+             }
 
-            //是否收藏
-            String collctionJson = (String) cacheService.hGet(BehaviorConstants.LIKE_BEHAVIOR + user.getId(), String.valueOf(dto.getArticleId()));
-            if(StringUtils.isNotBlank(collctionJson)){
-                isCollection = true;
-            }
+         }
 
-            // 3.4 是否关注
-            Double score = cacheService.zScore(BehaviorConstants.APUSER_FOLLOW_RELATION + user.getId(), dto.getAuthorId());
-            System.out.println(score);
-            if(score != null){
-                isFollow = true;
-            }
-        }
+         Map<String, Object> resultMap = new HashMap<>();
+         resultMap.put("isfollow", isfollow);
+         resultMap.put("islike", islike);
+         resultMap.put("isunlike", isunlike);
+         resultMap.put("iscollection", iscollection);
 
-        //更新对应的信息
-        Map<String, Object> resultMap = new HashMap<>();
-        resultMap.put("isfollow", isFollow);
-        resultMap.put("islike", isLike);
-        resultMap.put("isunlike", isUnlike);
-        resultMap.put("iscollection", isCollection);
-        //4.返回最终的信息
-        //返回的JSON都是用HashMap封装的
-        return ResponseResult.okResult(resultMap);
-    }
+         return ResponseResult.okResult(resultMap);
+     }
 
     /**
      * 查询文章的评论统计

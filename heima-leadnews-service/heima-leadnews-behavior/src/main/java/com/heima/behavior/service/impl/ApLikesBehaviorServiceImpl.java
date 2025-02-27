@@ -1,4 +1,4 @@
-package com.heima.behavior.service.Impl;
+package com.heima.behavior.service.impl;
 
 import com.alibaba.fastjson.JSON;
 import com.heima.behavior.service.ApLikesBehaviorService;
