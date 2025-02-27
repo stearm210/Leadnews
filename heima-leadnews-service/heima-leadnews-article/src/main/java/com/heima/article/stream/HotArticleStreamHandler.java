@@ -152,6 +152,7 @@ public class HotArticleStreamHandler {
         }
  
         log.info("聚合消息处理之后的结果为：{}", JSON.toJSONString(mess));
+        //转换为JSON字符串进行返回
         return JSON.toJSONString(mess);
     }
 }
