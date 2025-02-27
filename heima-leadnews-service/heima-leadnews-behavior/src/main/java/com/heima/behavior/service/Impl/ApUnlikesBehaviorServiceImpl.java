@@ -12,54 +12,41 @@ import com.heima.utils.thread.AppThreadLocalUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
- * @BelongsProject: heima-leadnews
- * @BelongsPackage: com.heima.behavior.service.Impl
- * @Author: yanhongwei
- * @CreateTime: 2025-02-20  15:13
- * @Description: TODO
- * @Version: 1.0
+ * <p>
+ * APP不喜欢行为表 服务实现类
+ * </p>
+ *
+ * @author itheima
  */
 @Slf4j
 @Service
-@Transactional
 public class ApUnlikesBehaviorServiceImpl implements ApUnlikesBehaviorService {
+
     @Autowired
     private CacheService cacheService;
-     /*
-      * @Title: unlike
-      * @Author: pyzxW
-      * @Date: 2025-02-20 15:13:35
-      * @Params:
-      * @Return: null
-      * @Description: 用户行为之不喜欢操作
-      */
+
     @Override
-    public ResponseResult unlike(UnLikesBehaviorDto dto) {
-        // 1. 检查参数
-        if(dto.getArticleId() == null) {
+    public ResponseResult unLike(UnLikesBehaviorDto dto) {
+
+        if (dto.getArticleId() == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.PARAM_INVALID);
         }
 
-        // 2. 获取用户信息
         ApUser user = AppThreadLocalUtil.getUser();
-        if(user == null) {
+        if (user == null) {
             return ResponseResult.errorResult(AppHttpCodeEnum.NEED_LOGIN);
         }
 
-        //3.对应操作
-        if (dto.getType() == 0){
-            //不喜欢操作
-            log.info("保存当前key: {} {} {}", dto.getArticleId(), user.getId(), dto);
+        if (dto.getType() == 0) {
+            log.info("保存当前key:{} ,{}, {}", dto.getArticleId(), user.getId(), dto);
             cacheService.hPut(BehaviorConstants.UN_LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString(), JSON.toJSONString(dto));
-        }else {
+        } else {
             log.info("删除当前key:{} ,{}, {}", dto.getArticleId(), user.getId(), dto);
             cacheService.hDelete(BehaviorConstants.UN_LIKE_BEHAVIOR + dto.getArticleId().toString(), user.getId().toString());
         }
 
-        //4.返回结果
         return ResponseResult.okResult(AppHttpCodeEnum.SUCCESS);
     }
 }

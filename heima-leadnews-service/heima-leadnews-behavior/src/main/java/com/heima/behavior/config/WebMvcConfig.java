@@ -1,6 +1,6 @@
 package com.heima.behavior.config;
- 
- 
+
+
 import com.heima.behavior.interceptor.AppTokenInterceptor;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
