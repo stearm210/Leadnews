@@ -3,6 +3,8 @@ package com.heima.article.test;
 import com.alibaba.fastjson.JSONArray;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.heima.article.ArticleApplication;
+import com.heima.article.mapper.ApArticleContentMapper;
+import com.heima.article.mapper.ApArticleMapper;
 import com.heima.file.service.FileStorageService;
 import com.heima.model.article.pojos.ApArticle;
 import com.heima.model.article.pojos.ApArticleContent;
