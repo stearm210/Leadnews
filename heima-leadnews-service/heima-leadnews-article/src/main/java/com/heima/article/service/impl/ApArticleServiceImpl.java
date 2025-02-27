@@ -71,39 +71,67 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
     * */
 //    传入的short type为对应的时间，注意
     @Override
-    public ResponseResult load(ArticleHomeDto dto, Short type) {
+    public ResponseResult load(Short loadtype, ArticleHomeDto dto) {
         //1.校验参数
-        //分页条数的校验
         Integer size = dto.getSize();
         if(size == null || size == 0){
             size = 10;
         }
-        //分页的值不超过50
-        size = Math.min(size, MAX_PAGE_SIZE);
-        //校验参数 -->type
-        if (!type.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !type.equals(ArticleConstants.LOADTYPE_LOAD_NEW)){
-            type = ArticleConstants.LOADTYPE_LOAD_MORE;
-        }
+        size = Math.min(size,MAX_PAGE_SIZE);
+        dto.setSize(size);
 
-        //频道参数校验
+        //类型参数检验
+        if(!loadtype.equals(ArticleConstants.LOADTYPE_LOAD_MORE)&&!loadtype.equals(ArticleConstants.LOADTYPE_LOAD_NEW)){
+            loadtype = ArticleConstants.LOADTYPE_LOAD_MORE;
+        }
+        //文章频道校验
         if(StringUtils.isEmpty(dto.getTag())){
             dto.setTag(ArticleConstants.DEFAULT_TAG);
         }
+
         //时间校验
-        //最大时间
-        if(dto.getMaxBehotTime() == null){
-            dto.setMaxBehotTime(new Date());
-        }
-        //最小时间
+        if(dto.getMaxBehotTime() == null) dto.setMaxBehotTime(new Date());
         if(dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
-
         //2.查询数据
-        List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, type);
+        List<ApArticle> apArticles = apArticleMapper.loadArticleList(dto, loadtype);
 
-        //3.结果返回
-        //返回最终的结果，封装于ResponseResult
-        return ResponseResult.okResult(articleList);
+        //3.结果封装
+        ResponseResult responseResult = ResponseResult.okResult(apArticles);
+        return responseResult;
     }
+//    public ResponseResult load(ArticleHomeDto dto, Short type) {
+//        //1.校验参数
+//        //分页条数的校验
+//        Integer size = dto.getSize();
+//        if(size == null || size == 0){
+//            size = 10;
+//        }
+//        //分页的值不超过50
+//        size = Math.min(size, MAX_PAGE_SIZE);
+//        //校验参数 -->type
+//        if (!type.equals(ArticleConstants.LOADTYPE_LOAD_MORE) && !type.equals(ArticleConstants.LOADTYPE_LOAD_NEW)){
+//            type = ArticleConstants.LOADTYPE_LOAD_MORE;
+//        }
+//
+//        //频道参数校验
+//        if(StringUtils.isEmpty(dto.getTag())){
+//            dto.setTag(ArticleConstants.DEFAULT_TAG);
+//        }
+//        //时间校验
+//        //最大时间
+//        if(dto.getMaxBehotTime() == null){
+//            dto.setMaxBehotTime(new Date());
+//        }
+//        //最小时间
+//        if(dto.getMinBehotTime() == null) dto.setMinBehotTime(new Date());
+//
+//        //2.查询数据
+//        List<ApArticle> articleList = apArticleMapper.loadArticleList(dto, type);
+//
+//        //3.结果返回
+//        //返回最终的结果，封装于ResponseResult
+//        return ResponseResult.okResult(articleList);
+//    }
 
     /**
      * 加载文章列表
@@ -115,18 +143,33 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
      */
     @Override
     public ResponseResult load2(ArticleHomeDto dto, Short type, boolean firstPage) {
-        if (firstPage){
+        if(firstPage){
             //获取对应的热点数据
             String jsonStr = cacheService.get(ArticleConstants.HOT_ARTICLE_FIRST_PAGE + dto.getTag());
             //如果不为空
-            if (StringUtils.isNotBlank(jsonStr)){
+            if(StringUtils.isNotBlank(jsonStr)){
                 List<HotArticleVo> hotArticleVoList = JSON.parseArray(jsonStr, HotArticleVo.class);
-                return ResponseResult.okResult(hotArticleVoList);
+                ResponseResult responseResult = ResponseResult.okResult(hotArticleVoList);
+                return responseResult;
             }
         }
         //非首页时
-        return load(dto, type);
+        return load(type,dto);
     }
+//    @Override
+//    public ResponseResult load2(ArticleHomeDto dto, Short type, boolean firstPage) {
+//        if (firstPage){
+//            //获取对应的热点数据
+//            String jsonStr = cacheService.get(ArticleConstants.HOT_ARTICLE_FIRST_PAGE + dto.getTag());
+//            //如果不为空
+//            if (StringUtils.isNotBlank(jsonStr)){
+//                List<HotArticleVo> hotArticleVoList = JSON.parseArray(jsonStr, HotArticleVo.class);
+//                return ResponseResult.okResult(hotArticleVoList);
+//            }
+//        }
+//        //非首页时
+//        return load(dto, type);
+//    }
 
     /*
       * @Title: saveArticle

@@ -25,10 +25,6 @@
         <result column="sync_status" property="syncStatus"/>
         <result column="static_url" property="staticUrl"/>
     </resultMap>
-    <!--  继承与mapper的接口，id为对应的接口名  -->
-    <!--  下面sql语句中的on是表进行左连接时需要保持的条件  -->
-    <!--  resultMap="resultMap" 是需要进行添加的元素 -->
-    <!--  limit用于限制查询条数  -->
     <select id="loadArticleList" resultMap="resultMap">
         SELECT
         aa.*
@@ -80,7 +76,6 @@
         AND aa.author_id = #{wmUserId}
           AND aa.publish_time <![CDATA[>=]]> #{beginDate}
           AND aa.publish_time <![CDATA[<]]> #{endDate}
-
     </select>
 
     <select id="findNewsComments" parameterType="com.heima.model.wemedia.dtos.StatisticsDto"

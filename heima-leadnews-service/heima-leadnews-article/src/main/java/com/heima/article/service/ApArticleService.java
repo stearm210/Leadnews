@@ -21,7 +21,8 @@ public interface ApArticleService extends IService<ApArticle> {
       * @Description: 加载文章列表
       */
 //    业务层用于接收持久层传回来的参数(文章的list)，并且转换为controller需要进行返回的参数，也就是ResponseResult
-    public ResponseResult load(ArticleHomeDto dto, Short type);
+   // public ResponseResult load(ArticleHomeDto dto, Short type);
+     public ResponseResult load(Short loadtype, ArticleHomeDto dto);
 
     /**
      * 加载文章列表
@@ -30,6 +31,7 @@ public interface ApArticleService extends IService<ApArticle> {
      * @param firstPage  true  是首页  flase 非首页
      * @return
      */
+    //public ResponseResult load2(ArticleHomeDto dto,Short type,boolean firstPage);
     public ResponseResult load2(ArticleHomeDto dto,Short type,boolean firstPage);
 
      /*
