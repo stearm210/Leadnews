@@ -131,6 +131,7 @@ public class HotArticleStreamHandler {
         ArticleVisitStreamMess mess = new ArticleVisitStreamMess();
         mess.setArticleId(Long.valueOf(articleId));
         //COLLECTION:0,COMMENT:0,LIKES:0,VIEWS:0
+        //将这个字符串通过逗号进行分隔
         String[] valAry = value.split(",");
         for (String val : valAry) {
             String[] split = val.split(":");
