@@ -246,6 +246,7 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
             if (flag) {
                 if (hotArticleVoList.size() >= 30) {
                     hotArticleVoList = hotArticleVoList.stream().sorted(Comparator.comparing(HotArticleVo::getScore).reversed()).collect(Collectors.toList());
+                    //查到最后一条数据
                     HotArticleVo lastHot = hotArticleVoList.get(hotArticleVoList.size() - 1);
                     if (lastHot.getScore() < score) {
                         hotArticleVoList.remove(lastHot);
