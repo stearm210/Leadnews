@@ -1,4 +1,4 @@
-package com.heima.behavior.controller;
+package com.heima.behavior.controller.v1;
 
 import com.heima.behavior.service.ApCollectionService;
 import com.heima.model.behavior.dtos.CollectionBehaviorDto;
