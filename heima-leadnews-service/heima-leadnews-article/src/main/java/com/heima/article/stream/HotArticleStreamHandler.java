@@ -114,6 +114,7 @@ public class HotArticleStreamHandler {
                 .map((key, value) -> {
                     return new KeyValue<>(key.key().toString(), formatObj(key.key().toString(), value));
                 })
+                //上面的这个formatObj函数用于格式化消息的value数据
                 // 发送消息,已经指定了topic
                 .to(HotArticleConstants.HOT_ARTICLE_INCR_HANDLE_TOPIC);
  
