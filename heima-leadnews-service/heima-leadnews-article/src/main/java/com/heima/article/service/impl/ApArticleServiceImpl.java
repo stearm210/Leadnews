@@ -206,18 +206,18 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
      */
     @Override
     public void updateScore(ArticleVisitStreamMess mess) {
-        // 1. 更新文章的阅读、点赞、收藏、评论的数量
+        //1.更新文章的阅读、点赞、收藏、评论的数量
         ApArticle apArticle = updateArticle(mess);
-
-        // 2. 计算文章的分值
+        //2.计算文章的分值
         Integer score = computeScore(apArticle);
         score = score * 3;
 
-        // 3. 替换当前文章对应的频道的热点数据
+        //3.替换当前文章对应频道的热点数据
         replaceDataToRedis(apArticle, score, ArticleConstants.HOT_ARTICLE_FIRST_PAGE + apArticle.getChannelId());
 
-        // 4. 替换推荐对应的热点数据
+        //4.替换推荐对应的热点数据
         replaceDataToRedis(apArticle, score, ArticleConstants.HOT_ARTICLE_FIRST_PAGE + ArticleConstants.DEFAULT_TAG);
+
     }
 
     /**
@@ -230,7 +230,6 @@ public class ApArticleServiceImpl extends ServiceImpl<ApArticleMapper, ApArticle
         String articleListStr = cacheService.get(s);
         if (StringUtils.isNotBlank(articleListStr)) {
             List<HotArticleVo> hotArticleVoList = JSON.parseArray(articleListStr, HotArticleVo.class);
-
             boolean flag = true;
 
             //如果缓存中存在该文章，只更新分值
