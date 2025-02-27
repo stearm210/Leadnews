@@ -2,7 +2,6 @@ package com.heima.article.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.heima.article.mapper.ApArticleConfigMapper;
 import com.heima.article.service.ApArticleConfigService;
 import com.heima.model.article.pojos.ApArticleConfig;
 import com.heima.model.comment.dtos.CommentConfigDto;
@@ -11,7 +10,8 @@ import com.heima.model.common.enums.AppHttpCodeEnum;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
+import com.heima.article.mapper.ApArticleConfigMapper;
+import java.util.Collection;
 import java.util.Map;
 
 
